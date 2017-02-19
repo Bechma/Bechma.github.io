@@ -1,3 +1,21 @@
+body{
+    background-image: url("../pics/fondo.jpg");
+    background-color: #cccccc;
+}
+
 h2[name^=v]{
     color: red;
+}
+
+
+table[name=pruebaTabla] > thead > tr:nth-child(odd){
+    background: #ff9999;
+}
+
+table[name=pruebaTabla] > tbody > tr:nth-child(even){
+    background: #ff9999;
+}
+
+table[name=pruebaTabla] > tbody > tr:nth-child(odd){
+    background: #ffcccc;
 }
