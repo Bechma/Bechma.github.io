@@ -1,0 +1,251 @@
+header img {
+    width: 99%;
+    display: block; /* Interpreto imagen como bloque y con margin auto se centra*/
+    margin: auto;
+    padding-bottom: 1%;
+}
+.img{
+    text-align: center;
+}
+.estructura{
+  margin: 1%;
+  display: flex;
+  justify-content: space-around;
+}
+body                    /*SOLUCIONAR URL PARA QUE SEA IMAGEN PROPIA*/
+{
+   /* background-image: url(https://artescritorio.com/wp-content/uploads/2016/12/ac-dc-1.jpg);*/
+    background-image: url("../Imagenes/fondo.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: block; 
+    margin: auto;
+    color: white;
+    font-size: 16px;
+    font-family :fantasy;
+}
+.estructura  .img{
+    text-align: center;
+
+}
+nav {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: rgba(230, 20, 20, 0.5) ;
+    color: beige;
+    border: groove;
+}
+nav  > ul{
+    display: flex; /*PARA PODER PONERLAS HORIZONTAL*/
+    justify-content: space-around;/* eSPACIO ENTRE ELLA*/
+    list-style-type: none;
+    color: brown;
+    
+}
+
+p{
+    text-align: justify;
+}
+ a:link{
+    color: rgb(218, 218, 218);
+    text-decoration: none;
+    font-size: 24px;
+}  
+ a:visited { color:rgb(255, 255, 255); }/* NO ME FUNCIONA EN SAFARI*/
+  a:hover{
+    color: rgb(255, 0, 0); 
+}
+
+
+
+
+
+    /*display: flex; Debo ponero para poder jugar con el aside y main*/
+    /*float: left;*/
+.estructura{/*Esto con flexbox sobra*/
+    overflow: auto;/*para que el contenedor se estructure por igual y el footer se vaya abajo*/
+    flex-direction: row;
+}
+
+   
+
+.columIZQ{ /*main*/   /*COMO HACER QUE FOOTER SE PONGA ABAJO*/
+    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
+    width: 60%;
+    padding: 30px;
+}
+.columDRCH{
+    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
+    width: 40%;
+    text-align: center;
+    padding: 30px;
+
+}
+
+
+
+/*--------------------------DISCOGRAFIA----HIGHWAY----------------------------------*/
+.columIZQ2 .img {
+    text-align: left;
+}
+
+.columIZQ2{ /*main*/   /*COMO HACER QUE FOOTER SE PONGA ABAJO*/
+    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
+    width: 40%;
+    padding: 2%;
+    order: 1;
+    
+}
+.columDRCH2{/*aside*/
+    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
+    width: 20%;
+    text-align: center;
+    padding: 30px;
+    order: 3;
+}
+.columDRCH2 h3{
+    color: brown;
+    font-size: 2em;
+   
+}
+.columDRCH2 ul{
+    list-style-type: none;
+}
+.columDRCH2 li{ /*--------------------------------*/
+    background-color: rgba(223, 16, 16, 0.5)
+    
+}
+.columDRCH2 li:hover{
+    background-color: rgba(8, 8, 8, 0.5)
+}
+tr:hover{
+    background-color:rgba(233, 230, 230, 0.925);
+    color: black;
+}
+
+
+  div ul, ol{
+    padding-left: 10%;
+    padding-right: auto;
+ }
+
+.DHparrafos{
+    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
+    width: 40%;
+    margin-top: 2%;
+    order: 2;
+}
+ .DHparrafos p {
+     text-align: left;
+     width: 400px;
+    text-align: justify;
+}
+table{
+    background-color: rgba(0, 0, 0, 0.8) ;
+}
+table .titulo{
+    background-color: rgba(230, 20, 20, 0.5) ;
+}
+tbody tr:nth-child(odd){
+   
+    background-color: rgba(5, 24, 109, 0.5);
+}
+tbody tr:nth-child(odd):hover{/*debo de ponerla pk me fastidia la de arriba y es mas especifica que la regal tr:hover{}*/
+    background-color:rgba(233, 230, 230, 0.925);
+    color: black;
+}
+
+
+aside .img{
+   text-align: left;
+}
+ /*----------------------------BIBLIOGRAFIA------------------------------*/
+ .derecho > ul{
+    padding-left: 70%;
+    padding-left: auto;
+ }
+ .titulosh2{
+     text-align: center; 
+     font-size: 2em
+ }
+.parrafoBiblio {/*no me funciona*/
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 2%;
+     
+ }
+ .parrafoBiblio > p{
+    padding: 10px;
+    width: 30%;
+    margin: 0px;
+ }
+ 
+
+/*--------------------TIENDA-----------------*/
+/*IMPORTANTE TENER EN CUENTA*/
+/*EL display: flex; Cuando lo aplicas a un contenedor X, solo funciona a sus hijos directos
+  HE tenido que hacer para cada bloque en tienda.html los contenedores con clase= flexpadre
+  Pkque aunque le haga al main el flex no se le aplica a los contenedores tiendaIZQ y tiendaDRCH
+  pk no son hijos directos*/
+#form{
+    padding: 2%
+}
+.main{
+    overflow: auto;/*para que el contenedor se estructure por igual y el footer se vaya abajo*/
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+ .tiendaIZQ{
+    margin: 2%;
+    border: groove;
+    padding: 1%;
+    box-sizing: border-box; /*para que el width tenga encuenta el paddin y el border pero no margin*/
+    width: 45%;
+ }
+ .tiendaDRCH
+ {
+    margin: 2%;
+     border: groove;
+     padding: 1%;
+    box-sizing: border-box; /*para que el width tenga encuenta el paddin y el border pero no margin*/
+    width: 45%;
+ }
+
+ h1Tienda{
+     margin-top: 2%;
+     margin-bottom: 2%;
+     box-sizing: border-box; /*para que el width tenga encuenta el paddin y el border pero no margin*/
+     width: 100%;
+ }
+ .botones{
+     padding-left: 2%;
+
+ }
+ .bot{
+    text-align: center;
+    font-size: 15px;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(0, 0, 0);
+    padding: 8px 16px;
+ }
+ .bot:hover{
+    background-color: rgb(5, 5, 5);
+    color: white;
+ }
+ .flexpadre{
+     display: flex;
+ }
+
+ nav > ul > li  .active{
+    color: red;
+
+}
+
+
+
+
+
+  
+
