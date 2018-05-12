@@ -15,8 +15,7 @@ header img {
 body                    /*SOLUCIONAR URL PARA QUE SEA IMAGEN PROPIA*/
 {
    /* background-image: url(https://artescritorio.com/wp-content/uploads/2016/12/ac-dc-1.jpg);*/
-    background-image: url("../Imagenes/fondo.jpg");
-    background-repeat: no-repeat;
+    background: url("../Imagenes/fondo.jpg") no-repeat;
     background-size: cover;
     display: block; 
     margin: auto;
@@ -53,7 +52,7 @@ p{
 }  
  a:visited { color:rgb(255, 255, 255); }/* NO ME FUNCIONA EN SAFARI*/
   a:hover{
-    color: rgb(255, 0, 0); 
+    color: rgb(255, 154, 15);
 }
 
 
@@ -136,9 +135,8 @@ tr:hover{
     order: 2;
 }
  .DHparrafos p {
-     text-align: left;
      width: 400px;
-    text-align: justify;
+     text-align: justify;
 }
 table{
     background-color: rgba(0, 0, 0, 0.8) ;
@@ -162,7 +160,6 @@ aside .img{
  /*----------------------------BIBLIOGRAFIA------------------------------*/
  .derecho > ul{
     padding-left: 70%;
-    padding-left: auto;
  }
  .titulosh2{
      text-align: center; 
@@ -178,7 +175,7 @@ aside .img{
  .parrafoBiblio > p{
     padding: 10px;
     width: 30%;
-    margin: 0px;
+    margin: 0;
  }
  
 
@@ -213,7 +210,7 @@ aside .img{
     width: 45%;
  }
 
- h1Tienda{
+ .h1Tienda{
      margin-top: 2%;
      margin-bottom: 2%;
      box-sizing: border-box; /*para que el width tenga encuenta el paddin y el border pero no margin*/
@@ -238,14 +235,27 @@ aside .img{
      display: flex;
  }
 
- nav > ul > li  .active{
+ nav > ul > li  .active, .error{
     color: red;
+}
 
+.correcto {
+    color: green;
 }
 
 
+.admin-botones {
+    background-color: Crimson;
+    border-radius: 5px;
+    color: white;
+    padding: 1px;
+    text-decoration: none;
+}
 
-
-
+.admin-botones:focus,
+.admin-botones:hover {
+    background-color: FireBrick;
+    color: White;
+}
   
 
