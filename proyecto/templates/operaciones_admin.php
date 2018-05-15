@@ -76,7 +76,7 @@ function acciones(){
 				echo "<p>Elija una opcion</p>";
 				break;
 		}
-	}
+	} else echo "<p>Elija una opcion</p>";
 }
 
 function listar_usuarios(){

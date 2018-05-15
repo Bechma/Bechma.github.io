@@ -10,5 +10,24 @@ function opciones_gestor(){
 			echo "<li><a href='dashboard.php?accion=$val'>{$name[$i]}</a></li>";
 		}
 		echo "</ul>";
+		acciones();
 	}
+}
+
+function acciones(){
+	if (isset($_REQUEST["accion"])){
+		switch ($_REQUEST["accion"]){
+			case "consulta":
+				break;
+			case "historico":
+				break;
+			case "precio":
+				break;
+			case "conciertos":
+				break;
+			default:
+				echo "<p>Elija una opcion</p>";
+				break;
+		}
+	} else echo "<p>Elija una opcion</p>";
 }

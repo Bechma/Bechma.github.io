@@ -42,14 +42,16 @@ require_once "pag_comun.php";
 HTMLinicio("Login");
 echo $error;
 ?>
-<form method="POST" action="login.php">
-	<fieldset>
-		<label for="email">Email:</label><br>
-		<input type="text" id="email" name="email" value="<?php if (isset($_POST['email'])) echo $_POST["email"] ?>"><br>
-		<label for="password">Password:</label><br>
-		<input type="password" id="password" name="password"><br>
-		<input type="submit">
-	</fieldset>
-</form>
+<div>
+	<form method="POST" action="login.php">
+		<fieldset>
+			<label for="email">Email:</label><br>
+			<input type="text" id="email" name="email" value="<?php if (isset($_POST['email'])) echo $_POST["email"] ?>"><br>
+			<label for="password">Password:</label><br>
+			<input type="password" id="password" name="password"><br>
+			<input type="submit">
+		</fieldset>
+	</form>
+</div>
 
 <?php HTMLfin() ?>
