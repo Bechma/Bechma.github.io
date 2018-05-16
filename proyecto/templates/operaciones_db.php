@@ -1,8 +1,12 @@
 <?php
 function db_conectar(){
+	// $servername = "localhost";
+	// $username = "mianbr1718";
+	// $password = "mA29PIX8";
+	// $dbname = "mianbr1718";
 	$servername = "localhost";
-	$username = "mianbr1718";
-	$password = "mA29PIX8";
+	$username = "root";
+	$password = "admin";
 	$dbname = "mianbr1718";
 
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -15,7 +19,7 @@ function db_conectar(){
 
 
 function db_modificar_usuario(){
-	if (isset($_POST["tipo"], $_POST["nombre"], $_POST["apellidos"], $_POST["email"], $_POST["password"], $_POST["telefono"])){
+	if (isset($_POST["tipo"], $_POST["nombre"], $_POST["apellidos"], $_POST["email"], $_POST["password"], $_POST["telefono"]) && !isset($_POST["cancelar"])){
 		$conn = db_conectar();
 
 		$old_email = $conn->real_escape_string($_POST["usuarios_mod2"]);

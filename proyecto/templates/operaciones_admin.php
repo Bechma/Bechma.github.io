@@ -63,8 +63,16 @@ function acciones(){
 						modificar_usuario($_POST["usuarios_mod2"]);
 					}
 					else {
-						echo "<p class='error'>Se ha producido un error, vuelve a intentarlo";
-						modificar_usuario($_POST["usuarios_mod2"]);
+						if($_POST['cancelar'])
+						{
+							echo "<p class='correcto'>Accion Cancelada correctamente</p>";
+						}
+						else
+						{
+							echo "<p class='error'>Se ha producido un error, vuelve a intentarlo";
+							modificar_usuario($_POST["usuarios_mod2"]);
+						}
+						
 					}
 				}
 				else
@@ -147,7 +155,7 @@ function modificar_usuario($email){
 		$_POST["email"] = $row["Email"];
 		$_POST["password"] = $row["Password"];
 		$_POST["telefono"] = $row["Telefono"];
-
+		$_POST["tipo"] = $row["TipoUser"];
 		echo "<p>Modificar usuario:</p>";
 		form_usuario("usuarios_mod2", $email);
 	} else
@@ -161,6 +169,15 @@ function insertar_usuario(){
 
 
 function form_usuario($location, $extra="true"){
+	
+	$gestor=$administrador='';
+    if($_POST['tipo']=='gestor')//para el type = radio
+    {
+        $gestor='checked';
+    }
+    elseif($_POST['tipo']=='admin')
+		$administrador='checked';
+		
 	echo "<form method='post' action='".htmlspecialchars($_SERVER["PHP_SELF"])."'>
 	<label for='nombre'>Nombre: </label>
 	<input type='text' id='nombre' name='nombre'
@@ -183,16 +200,18 @@ function form_usuario($location, $extra="true"){
 	value='" . (isset($_POST['telefono']) ? $_POST['telefono'] : '') . "'>
 	<br>
 	<label for='admin'>Administrador: </label>
-	<input type='radio' id='admin' name='tipo'>
+	<input type='radio' id='admin' name='tipo' value='admin' $administrador>
 	<label for='gestor'>Gestor: </label>
-	<input type='radio' id='gestor' name='tipo' checked>
+	<input type='radio' id='gestor' name='tipo' value='gestor' $gestor>
 	<br>
 	<input type='hidden' name='accion' value='usuarios'>
 	<input type='hidden' name='$location' value='$extra'>
 	<input type='submit' value='Enviar'>
+	<input type='submit' name='cancelar' value='Cancelar'>
 </form>
 ";
 }
+
 
 
 function imprimir_formulario($name, $value){
