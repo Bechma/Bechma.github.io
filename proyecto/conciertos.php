@@ -1,5 +1,6 @@
 <?php
 require_once "pag_comun.php";
+
 require_once "templates/operaciones_db.php";
 
 HTMLinicio("Conciertos");
@@ -44,3 +45,4 @@ if ($result->num_rows > 0) {
 $conn->close();
 
 HTMLfin();
+

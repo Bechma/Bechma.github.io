@@ -1,4 +1,5 @@
 <?php
+require_once "templates/operaciones_db.php";
 //------------------------------------------------------------------------------------------------------
 function HTMLinicio($titulo)
 {
@@ -54,7 +55,7 @@ function HTMLpag_tienda()
     <form action="php/procesarP2.php" method="POST" enctype="multipart/form-data" id="form">
         
         <main class="main">
-                <h1 class="h1Tienda">Seleccione el disco a comprar</h1>
+                <h1 class="h1Titulo">Seleccione el disco a comprar</h1>
                 <div class="flexpadre">
                     <div class="tiendaIZQ">
                         <input type="checkbox" name="disco">
@@ -73,7 +74,7 @@ function HTMLpag_tienda()
                         <input type="checkbox" name="disco">Ballbreaker<br>
                     </div>
                 </div>
-                <h1 class="h1Tienda">Introduzca Dados Personales</h1>
+                <h1 class="h1Titulo">Introduzca Dados Personales</h1>
                 <div class="flexpadre"> 
                         <div class="tiendaIZQ">
                                 Nombre:<br><input type="text" name="nombre"><br><br>
@@ -84,7 +85,7 @@ function HTMLpag_tienda()
                                 Edad:<br><input type="number" name="edad">
                         </div> 
                 </div>    
-                    <h1 class="h1Tienda">Tipo De Pago</h1>
+                    <h1 class="h1Titulo">Tipo De Pago</h1>
                 <div class="flexpadre">
                             <div class="tiendaIZQ">
                             <label>Seleccione Targeta</label>
@@ -99,7 +100,7 @@ function HTMLpag_tienda()
                             </div>
                 </div>
                 
-                    <h1 class="h1Tienda">Direccion de Envio</h1>
+                    <h1 class="h1Titulo">Direccion de Envio</h1>
                 <div class="flexpadre">   
                     
                             <div class="tiendaIZQ">
@@ -125,4 +126,3 @@ function HTMLpag_tienda()
     </form> 
 HTML;
 }
-
