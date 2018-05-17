@@ -1,4 +1,5 @@
 <?php
+require_once "templates/operaciones_db.php";
 //------------------------------------------------------------------------------------------------------
 function HTMLinicio($titulo)
 {
@@ -125,5 +126,61 @@ function HTMLpag_tienda()
     </form> 
 HTML;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------CONCIERTOS--------------------------------------------
 
+function HTMLpag_conciertos(){
+    echo <<<HTML
+    <h2 class="titulosh2"> Conciertos </h2>
+HTML;
+
+
+    $conn = db_conectar();
+    if ($conn->connect_error) {
+        die('No se ha podido conectar: ' . $con->connect_error);
+    }
+    $sql = "select count(fecha) from conciertos";
+    $result = $conn->query($sql);
+    $row=$result->fetch_array(MYSQLI_NUM);
+    $nRows=$row[0];
+    $pageSize=600;
+    if(isset($_GET['pageSize'])){
+        $pageSize=$_GET['pageSize'];
+    }
+    $page=0;
+    if(isset($_GET['page'])){
+        $page=$_GET['page'];
+    }
+    $pos=$page*$pageSize;
+    $pos=($pos>$nRows)?$nRows:$pos;
+    $sql = "SELECT * FROM conciertos order by fecha";
+    $result = $conn->query($sql);
+if ($result->num_rows > 0) {
 ?>
+    
+    <table border='2'>
+        <tr>
+	<th>Fecha</th><th>Hora</th><th>Lugar</th><th>Descripcion</th>
+        </tr>
+
+<?php
+    while($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>".$row["Fecha"]."</td> ";
+        echo "<td>".$row["Hora"]."</td> ";
+        echo "<td>".$row["Lugar"]."</td> ";
+        echo "<td>".$row["Descripcion"]."</td> ";
+        echo "</tr>\n";
+    }
+?>
+  	</tr>
+     </table>
+<?php
+    } else {
+	echo "No hay conciertos que mostrar";
+    }
+    $conn->close();
+}
+?>
+
+
