@@ -17,6 +17,7 @@ if ($_SESSION["tipo_user"] === "admin"){
 	opciones_gestor();
 } else {
 	die("<p>ERROR, sesion invalida</p>");
+
 }
 
 HTMLfin();

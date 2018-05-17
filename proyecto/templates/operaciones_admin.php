@@ -1,20 +1,25 @@
 <?php
 require_once "operaciones_db.php";
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------
 function opciones_admin(){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$href = ["componentes", "biografia", "discografia", "conciertos", "usuarios", "log", "logout"];
 		$name = ["Editar Componentes Grupo", "Editar biografía", "Editar discografía", "Editar conciertos", "Editar usuarios", "Ver log del servidor", "Desconectarse"];
-		echo "<ul>";
-		foreach($href as $i => $val){
-			echo "<li><a href='dashboard.php?accion=$val'>{$name[$i]}</a></li>";
-		}
-		echo "</ul>";
-
+		echo '<div align="center">';	
+			echo '<div class="login">';
+				echo "<ul>";
+				foreach($href as $i => $val){
+					
+					echo "<li><a href='dashboard.php?accion=$val'>{$name[$i]}</a></li>";
+				}
+				echo "</ul>";
+			echo "</div>";
+		echo "</div>";
+		
 		acciones();
 	}
 }
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------
 function acciones(){
 	if (isset($_REQUEST["accion"])){
 		switch ($_REQUEST["accion"]){
@@ -25,6 +30,60 @@ function acciones(){
 			case "discografia":
 				break;
 			case "conciertos":
+
+			if (isset($_POST["borrar_conciertos"])){
+				db_borrar_usuario($_POST["borrar_conciertos"]);
+				listar_conciertos();
+			}
+			elseif (isset($_REQUEST["usuarios_add"])){
+				insertar_usuario();
+			}
+			elseif (isset($_POST["usuarios_add2"])){
+				$result = db_insertar_usuario();
+				if ($result === TRUE){
+					echo "<p class='correcto'>Usuario insertado correctamente</p>";
+					listar_conciertos();
+				}
+				elseif ($result === "email"){
+					echo "<p class='error'>Email no valido</p>";
+					insertar_usuario();
+				}
+				else {
+					echo "<p class='error'>Se ha producido un error, vuelve a intentarlo";
+					insertar_usuario();
+				}
+			}
+			elseif (isset($_REQUEST["usuarios_mod"])){
+				modificar_usuario(base64_decode($_REQUEST["usuarios_mod"]));
+			}
+			elseif (isset($_POST["usuarios_mod2"])){
+				$result = db_modificar_usuario();
+				if ($result === TRUE){
+					echo "<p class='correcto'>Usuario modificado correctamente</p>";
+					listar_conciertos();
+				}
+				elseif ($result === "email"){
+					echo "<p class='error'>Email no valido</p>";
+					modificar_usuario($_POST["usuarios_mod2"]);
+				}
+				else {
+					if($_POST['cancelar'])
+					{
+						echo "<p class='correcto'>Accion Cancelada correctamente</p>";
+					}
+					else
+					{
+						echo "<p class='error'>Se ha producido un error, vuelve a intentarlo";
+						modificar_usuario($_POST["usuarios_mod2"]);
+					}
+					
+				}
+			}
+			else
+				listar_conciertos();
+			break;
+
+
 				break;
 			case "usuarios":
 				if (isset($_POST["borrar_user"])){
@@ -87,6 +146,59 @@ function acciones(){
 	} else echo "<p>Elija una opcion</p>";
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+function listar_conciertos()
+{
+	$conn = db_conectar();
+	$result = $conn->query("SELECT * FROM conciertos");
+	echo <<<HTML
+	<script type='text/javascript'>
+	function eliminar(objButton) {
+	  const Fecha = atob(objButton.name);
+	  if (window.confirm('Desea eliminar a ' + Fecha + '???')){
+	  	let ajax = new XMLHttpRequest();
+	  	ajax.open('POST', 'dashboard.php');
+	  	ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	  	ajax.onreadystatechange = () => {
+	  		if (ajax.status === 200 && ajax.readyState === 4)
+	  			objButton.parentNode.parentNode.parentNode.removeChild(objButton.parentNode.parentNode);
+	  	};
+	  	ajax.send('accion={$_REQUEST["accion"]}&borrar_conciertos='+Fecha);
+	  } 
+	}
+	</script>
+	<table border='2' align='center'>
+	<thead>
+		<tr>
+			<th>Fecha</th>
+			<th>Hora</th>
+			<th>Lugar</th>
+			<th>Descripcion</th>
+		</tr>
+	</thead>
+	<tbody>
+HTML;
+	while ( $row = $result->fetch_assoc() ){
+		echo "
+	<tr>
+	<td>".htmlentities($row["Fecha"])."</td>
+	<td>".htmlentities($row["Hora"])."</td>
+	<td>".htmlentities($row["Lugar"])."</td>
+	<td>".htmlentities($row["Descripcion"])."</td>
+	<td><input class='admin-botones' type='button' value='Borrar' name='".base64_encode($row["Fecha"])."' onclick='eliminar(this)'>
+		<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=conciertos&conciertos_mod=".base64_encode($row["Fecha"])."'>Modificar</a></td>
+	</tr>";
+	}
+
+	echo "
+	</tbody>
+	</table>
+	<div align='center'>
+	<a role='button'  class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=conciertos&conciertos_add=true'>Agregar usuario</a>
+	</div>";
+	$conn->close();
+}
+//----------------------------------------------------------------------------------------------------------------------------------------------------
 function listar_usuarios(){
 	$conn = db_conectar();
 	$result = $conn->query("SELECT * FROM usuarios");
@@ -107,7 +219,7 @@ function listar_usuarios(){
 	}
 </script>
 
-<table>
+<table border='2' align='center'>
 <thead>
 	<tr>
 		<th>Nombre</th>
@@ -138,11 +250,13 @@ function listar_usuarios(){
 	echo "
 	</tbody>
 	</table>
-	<a role='button' class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=usuarios&usuarios_add=true'>Agregar usuario</a>";
+	<div align='center'>
+	<a role='button'  class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=usuarios&usuarios_add=true'>Agregar usuario</a>
+	</div>";
 	$conn->close();
 }
 
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------
 
 function modificar_usuario($email){
 	$conn = db_conectar();
@@ -156,7 +270,7 @@ function modificar_usuario($email){
 		$_POST["password"] = $row["Password"];
 		$_POST["telefono"] = $row["Telefono"];
 		$_POST["tipo"] = $row["TipoUser"];
-		echo "<p>Modificar usuario:</p>";
+		echo "<h1 class='h1login'>Modificar Usuario</h1>";
 		form_usuario("usuarios_mod2", $email);
 	} else
 		echo "<p class='error'>ERROR</p>";
@@ -171,49 +285,56 @@ function insertar_usuario(){
 function form_usuario($location, $extra="true"){
 	
 	$gestor=$administrador='';
-    if($_POST['tipo']=='gestor')//para el type = radio
+    if(isset($_POST['tipo']) && $_POST['tipo']=='gestor')//para el type = radio
     {
         $gestor='checked';
     }
-    elseif($_POST['tipo']=='admin')
+    elseif(isset($_POST['tipo']) && $_POST['tipo']=='admin')
 		$administrador='checked';
 		
-	echo "<form method='post' action='".htmlspecialchars($_SERVER["PHP_SELF"])."'>
-	<label for='nombre'>Nombre: </label>
-	<input type='text' id='nombre' name='nombre'
-	value='" . (isset($_POST['nombre']) ? $_POST['nombre'] : '') . "'>
-	<br>
-	<label for='apellidos'>Apellidos: </label>
-	<input type='text' id='apellidos' name='apellidos'
-	value='" . (isset($_POST['apellidos']) ? $_POST['apellidos'] : '') . "'>
-	<br>
-	<label for='email'>Email: </label>
-	<input type='email' id='email' name='email'
-	value='" . (isset($_POST['email']) ? $_POST['email'] : '') . "' required>
-	<br>
-	<label for='password'>Password: </label>
-	<input type='password' id='password' name='password'
-	value='" . (isset($_POST['password']) ? $_POST['password'] : '') . "' required>
-	<br>
-	<label for='telefono'>Telefono: </label>
-	<input type='text' id='telefono' name='telefono'
-	value='" . (isset($_POST['telefono']) ? $_POST['telefono'] : '') . "'>
-	<br>
-	<label for='admin'>Administrador: </label>
-	<input type='radio' id='admin' name='tipo' value='admin' $administrador>
-	<label for='gestor'>Gestor: </label>
-	<input type='radio' id='gestor' name='tipo' value='gestor' $gestor>
-	<br>
-	<input type='hidden' name='accion' value='usuarios'>
-	<input type='hidden' name='$location' value='$extra'>
-	<input type='submit' value='Enviar'>
-	<input type='submit' name='cancelar' value='Cancelar'>
-</form>
+	echo "
+	<div align='center'>	
+		<div class='login'>
+			<form method='post' action='".htmlspecialchars($_SERVER["PHP_SELF"])."'>
+				
+				
+				<label for='nombre'>Nombre: </label>
+				<input type='text' id='nombre' name='nombre'
+				value='" . (isset($_POST['nombre']) ? $_POST['nombre'] : '') . "'>
+				<br>
+				<label for='apellidos'>Apellidos: </label>
+				<input type='text' id='apellidos' name='apellidos'
+				value='" . (isset($_POST['apellidos']) ? $_POST['apellidos'] : '') . "'>
+				<br>
+				<label for='email'>Email: </label>
+				<input type='email' id='email' name='email'
+				value='" . (isset($_POST['email']) ? $_POST['email'] : '') . "' required>
+				<br>
+				<label for='password'>Password: </label>
+				<input type='password' id='password' name='password'
+				value='" . (isset($_POST['password']) ? $_POST['password'] : '') . "' required>
+				<br>
+				<label for='telefono'>Telefono: </label>
+				<input type='text' id='telefono' name='telefono'
+				value='" . (isset($_POST['telefono']) ? $_POST['telefono'] : '') . "'>
+				<br>
+				<label for='admin'>Administrador: </label>
+				<input type='radio' id='admin' name='tipo' value='admin' $administrador>
+				<label for='gestor'>Gestor: </label>
+				<input type='radio' id='gestor' name='tipo' value='gestor' $gestor>
+				<br>
+				<input type='hidden' name='accion' value='usuarios'>
+				<input type='hidden' name='$location' value='$extra'>
+				<input type='submit' value='Enviar'>
+				<input type='submit' name='cancelar' value='Cancelar'>
+			</form>
+			</div>
+		</div>	
 ";
 }
 
 
-
+//print_r($_POST);
 function imprimir_formulario($name, $value){
 	$storage = "<form method='post' action='".htmlspecialchars($_SERVER["PHP_SELF"])."'>";
 	$storage .= "<input type='submit' name='$name' value='$value'></form>";

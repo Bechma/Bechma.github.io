@@ -210,12 +210,7 @@ aside .img{
     width: 45%;
  }
 
- .h1Tienda{
-     margin-top: 2%;
-     margin-bottom: 2%;
-     box-sizing: border-box; /*para que el width tenga encuenta el paddin y el border pero no margin*/
-     width: 100%;
- }
+
  .botones{
      padding-left: 2%;
 
@@ -256,6 +251,23 @@ aside .img{
 .admin-botones:hover {
     background-color: FireBrick;
     color: White;
+    
 }
-  
+
+.login{
+    margin: 5%;
+    text-align: left;
+    border: groove;
+    padding: 1%;
+    box-sizing: border-box; /*para que el width tenga encuenta el paddin y el border pero no margin*/
+    width: 50%;
+}
+
+.h1login{
+     margin-top: 2%;
+     margin-bottom: 2%;
+     box-sizing: border-box; /*para que el width tenga encuenta el paddin y el border pero no margin*/
+     width: 100%;
+     text-align: center;
+}
 

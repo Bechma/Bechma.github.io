@@ -1,4 +1,5 @@
 <?php
+require_once "templates/operaciones_db.php";
 //------------------------------------------------------------------------------------------------------
 function HTMLinicio($titulo)
 {
@@ -302,7 +303,7 @@ function HTMLpag_tienda()
     <form action="php/procesarP2.php" method="POST" enctype="multipart/form-data" id="form">
         
         <main class="main">
-                <h1 class="h1Tienda">Seleccione el disco a comprar</h1>
+                <h1 class="h1Titulo">Seleccione el disco a comprar</h1>
                 <div class="flexpadre">
                     <div class="tiendaIZQ">
                         <input type="checkbox" name="disco">
@@ -321,7 +322,7 @@ function HTMLpag_tienda()
                         <input type="checkbox" name="disco">Ballbreaker<br>
                     </div>
                 </div>
-                <h1 class="h1Tienda">Introduzca Dados Personales</h1>
+                <h1 class="h1Titulo">Introduzca Dados Personales</h1>
                 <div class="flexpadre"> 
                         <div class="tiendaIZQ">
                                 Nombre:<br><input type="text" name="nombre"><br><br>
@@ -332,7 +333,7 @@ function HTMLpag_tienda()
                                 Edad:<br><input type="number" name="edad">
                         </div> 
                 </div>    
-                    <h1 class="h1Tienda">Tipo De Pago</h1>
+                    <h1 class="h1Titulo">Tipo De Pago</h1>
                 <div class="flexpadre">
                             <div class="tiendaIZQ">
                             <label>Seleccione Targeta</label>
@@ -347,7 +348,7 @@ function HTMLpag_tienda()
                             </div>
                 </div>
                 
-                    <h1 class="h1Tienda">Direccion de Envio</h1>
+                    <h1 class="h1Titulo">Direccion de Envio</h1>
                 <div class="flexpadre">   
                     
                             <div class="tiendaIZQ">
@@ -373,5 +374,60 @@ function HTMLpag_tienda()
     </form> 
 HTML;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------CONCIERTOS--------------------------------------------
 
+function HTMLpag_conciertos(){
+    echo <<<HTML
+    <h2 class="titulosh2"> Conciertos </h2>
+HTML;
+
+
+    $conn = db_conectar();
+    if ($conn->connect_error) {
+        die('No se ha podido conectar: ' . $con->connect_error);
+    }
+    $sql = "select count(fecha) from conciertos";
+    $result = $conn->query($sql);
+    $row=$result->fetch_array(MYSQLI_NUM);
+    $nRows=$row[0];
+    $pageSize=600;
+    if(isset($_GET['pageSize'])){
+        $pageSize=$_GET['pageSize'];
+    }
+    $page=0;
+    if(isset($_GET['page'])){
+        $page=$_GET['page'];
+    }
+    $pos=$page*$pageSize;
+    $pos=($pos>$nRows)?$nRows:$pos;
+    $sql = "SELECT * FROM conciertos order by fecha";
+    $result = $conn->query($sql);
+if ($result->num_rows > 0) {
 ?>
+    <table border='2'>
+        <tr>
+	<th>Fecha</th><th>Hora</th><th>Lugar</th><th>Descripcion</th><th></th>
+        </tr>
+
+<?php
+    while($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>".$row["Fecha"]."</td> ";
+        echo "<td>".$row["Hora"]."</td> ";
+        echo "<td>".$row["Lugar"]."</td> ";
+        echo "<td>".$row["Descripcion"]."</td> ";
+        echo "</tr>\n";
+    }
+?>
+  	</tr>
+     </table>
+<?php
+    } else {
+	echo "No hay conciertos que mostrar";
+    }
+    $conn->close();
+}
+?>
+
+
