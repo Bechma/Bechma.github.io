@@ -1,5 +1,6 @@
 <?php
 function db_conectar(){
+<<<<<<< HEAD
 	 $servername = "localhost";
 	 $username = "mianbr1718";
 	 $password = "mA2vfevfd9PIX8";
@@ -8,6 +9,13 @@ function db_conectar(){
 	//$username = "root";
 	//$password = "admin";
 	//$dbname = "mianbr1718";
+=======
+	$servername = "localhost";
+	$username = "mianbr1718";
+	$password = "mA29PIX8";
+	$dbname = "mianbr1718";
+>>>>>>> 73905b2038c4edfd21ffca623190f6c05dfb76b6
+
 
 	$conn = new mysqli($servername, $username, $password, $dbname);
 
