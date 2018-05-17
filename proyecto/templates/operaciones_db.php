@@ -1,9 +1,8 @@
 <?php
 function db_conectar(){
-
 	$servername = "localhost";
-	$username = "root";
-	$password = "admin";
+	$username = "mianbr1718";
+	$password = "mA29PIX8";
 	$dbname = "mianbr1718";
 
 

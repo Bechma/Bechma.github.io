@@ -23,7 +23,7 @@ if ($disco_row !== FALSE && $disco_row->num_rows === 1){
 <div class="estructura">
 	<!-- COLUMNA DE LA IZQUIERDA-->
 	<aside class="columIZQ2">
-		<h2>Back In Black</h2>
+		<h2><?php echo $disco_row["Nombre"] ?></h2>
 		<div class="img">
 			<img width="50%" src="<?php echo $disco_row["Imagen"] ?>" alt="No se ha podido cargar imagen" >
 		</div>
