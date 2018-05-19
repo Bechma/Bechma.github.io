@@ -12,9 +12,7 @@ header img {
   display: flex;
   justify-content: space-around;
 }
-body                    /*SOLUCIONAR URL PARA QUE SEA IMAGEN PROPIA*/
-{
-   /* background-image: url(https://artescritorio.com/wp-content/uploads/2016/12/ac-dc-1.jpg);*/
+body {
     background: url("../Imagenes/fondo.jpg") no-repeat;
     background-size: cover;
     display: block; 
@@ -50,10 +48,8 @@ p{
     text-decoration: none;
     font-size: 24px;
 }  
- a:visited { color:rgb(255, 255, 255); }/* NO ME FUNCIONA EN SAFARI*/
-  a:hover{
-    color: rgb(255, 154, 15);
-}
+a:visited { color:rgb(255, 255, 255); }/* NO ME FUNCIONA EN SAFARI*/
+a:hover{ color: rgb(255, 154, 15); }
 
 
 
@@ -93,8 +89,8 @@ p{
     width: 40%;
     padding: 2%;
     order: 1;
-    
 }
+
 .columDRCH2{/*aside*/
     box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
     width: 20%;
@@ -194,13 +190,13 @@ aside .img{
     padding-right: 8%;
 }
 
- .tiendaIZQ{
+.tiendaIZQ{
     margin: 2%;
     border: groove;
     padding: 1%;
     box-sizing: border-box; /*para que el width tenga encuenta el paddin y el border pero no margin*/
     width: 45%;
- }
+}
  .tiendaDRCH
  {
     margin: 2%;
@@ -211,26 +207,27 @@ aside .img{
  }
 
 
- .botones{
-     padding-left: 2%;
+.botones{
+    padding-left: 2%;
+}
 
- }
- .bot{
+.bot{
     text-align: center;
     font-size: 15px;
     background-color: rgb(255, 255, 255);
     border: 2px solid rgb(0, 0, 0);
     padding: 8px 16px;
- }
- .bot:hover{
+}
+.bot:hover{
     background-color: rgb(5, 5, 5);
     color: white;
- }
- .flexpadre{
-     display: flex;
- }
+}
 
- nav > ul > li  .active, .error{
+.flexpadre{
+     display: flex;
+}
+
+nav > ul > li  .active, .error{
     color: red;
 }
 
@@ -281,8 +278,7 @@ div > .boton-carro{
     font-size: 16px;
     cursor: pointer;
     -webkit-transition-duration: 0.4s;
-    transition-duration: 0,4s;
-    
+    transition-duration: 0.4s;
 }
 .boton-carro:hover{
     background-color: rgb(102, 0, 0);
@@ -306,17 +302,16 @@ div > .boton-carro{
     justify-content: space-around;
   }
   
-  .flex-item {
-    
+.flex-item {
     padding: 5px;
     margin-top: 10px;
-    
+
     line-height: 150px;
-    
+
     font-weight: bold;
     font-size: 3em;
     text-align: center;
-  }
+}
 
 .flex-disco{
     display:flex;
@@ -327,14 +322,15 @@ div > .boton-carro{
 .centrar{
     text-align: center;
 }
+
 .centrar-boton{
-    padding-left:23%;
+    align-self: center;
 }
 
 .texto-precio{
     font-size: 16px;
 }
 
-.icono{
-    padding-top: 10px;
+.boton-carro > img, .boton-carro > span {
+    vertical-align: middle;
 }
