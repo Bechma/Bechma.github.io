@@ -31,5 +31,5 @@ HTMLinicio("Tienda");
 
 
 HTMLfin();
-
+$conn->close();
 ?>
