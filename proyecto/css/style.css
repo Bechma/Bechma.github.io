@@ -1,3 +1,4 @@
+
 header img {
     width: 99%;
     display: block; /* Interpreto imagen como bloque y con margin auto se centra*/
@@ -21,7 +22,7 @@ body                    /*SOLUCIONAR URL PARA QUE SEA IMAGEN PROPIA*/
     margin: auto;
     color: white;
     font-size: 16px;
-    font-family :fantasy;
+    font-family: fantasy;
 }
 .estructura  .img{
     text-align: center;
@@ -186,7 +187,7 @@ aside .img{
   Pkque aunque le haga al main el flex no se le aplica a los contenedores tiendaIZQ y tiendaDRCH
   pk no son hijos directos*/
 #form{
-    padding: 2%
+    padding: 2%;
 }
 .main{
     overflow: auto;/*para que el contenedor se estructure por igual y el footer se vaya abajo*/
@@ -230,12 +231,18 @@ aside .img{
      display: flex;
  }
 
- nav > ul > li  .active, .error{
+ nav > ul > li  .active{
     color: red;
 }
-
+.error{
+    color: red;
+    text-align: center;
+    font-size: 2em;
+}
 .correcto {
     color: green;
+    text-align: center;
+    font-size: 2em;
 }
 
 
@@ -270,4 +277,5 @@ aside .img{
      width: 100%;
      text-align: center;
 }
+
 

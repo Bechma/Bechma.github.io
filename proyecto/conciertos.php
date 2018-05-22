@@ -25,7 +25,7 @@ $pos=($pos>$nRows)?$nRows:$pos;
 $sql = "SELECT * FROM conciertos order by fecha";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
-	echo "<table border='2'>
+	echo "<table border='2'align='center'>
 	<tr>
 		<th>Fecha</th><th>Hora</th><th>Lugar</th><th>Descripcion</th>
 	</tr>
