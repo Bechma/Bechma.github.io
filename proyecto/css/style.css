@@ -33,7 +33,7 @@ body {
 }
 
 
-nav {
+nav, footer {
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: rgba(230, 20, 20, 0.5) ;
@@ -325,7 +325,6 @@ div > .boton-carro{
     width: 33%;
     justify-content: space-between; /*space-betwen hace que digamos un alineamiento para que el contenedor carrito y el titulo en tienda lo ponga a la misma altura  */
 }
-.flex-disco > 
 
 .centrar{
     text-align: center;
@@ -349,7 +348,7 @@ div > .boton-carro{
     justify-content: center;
     
     display: flex;
-    margin: 0%;
+    margin: 0;
     overflow: auto;/*para que el contenedor se estructure por igual y el footer se vaya abajo*/
     flex-direction: row;
 

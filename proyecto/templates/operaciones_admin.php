@@ -7,12 +7,11 @@ function opciones_admin(){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$href = ["componentes", "biografia", "discografia", "conciertos", "usuarios", "log", "logout"];
 		$name = ["Editar Componentes Grupo", "Editar biografía", "Editar discografía", "Editar conciertos", "Editar usuarios", "Ver log del servidor", "Desconectarse"];
-		echo '<div align="center">';	
+		echo '<div id="panel_control" align="center">';
 			echo '<div class="login">';
 				echo "<ul>";
 				foreach($href as $i => $val){
-					
-					echo "<li><a href='dashboard.php?accion=$val'>{$name[$i]}</a></li>";
+					echo "<li><a href='dashboard.php?accion=$val#panel_control'>{$name[$i]}</a></li>";
 				}
 				echo "</ul>";
 			echo "</div>";
@@ -140,7 +139,7 @@ function acciones(){
 					else
 					{
 						echo "<p class='error'>Se ha producido un error, vuelve a intentarlo";
-						modificar_conciertos($_POST["conciertos_mod2"]);
+						modificar_concierto($_POST["conciertos_mod2"]);
 					}
 					
 				}
@@ -575,5 +574,3 @@ function imprimir_formulario($name, $value){
 	$storage .= "<input type='submit' name='$name' value='$value'></form>";
 	return $storage;
 }
-
-?>

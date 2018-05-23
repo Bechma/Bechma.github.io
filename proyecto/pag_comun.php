@@ -38,13 +38,13 @@ function HTMLfin()
     <div id="foot">
         
         <div class="footIMG">
-        <a href="https://www.instagram.com"><img src="Imagenes/insta.png" alt="No se ha podido cargar la imagen"> </a>
+        <a href="https://www.instagram.com/acdc/"><img src="Imagenes/insta.png" alt="No se ha podido cargar la imagen"> </a>
         </div>
         <div class="footIMG">
-        <a href="https://www.facebook.com"><img src="Imagenes/facebook.png" alt="No se ha podido cargar la imagen"></a>     
+        <a href="https://www.facebook.com/acdc/"><img src="Imagenes/facebook.png" alt="No se ha podido cargar la imagen"></a>     
         </div>
         <div class="footIMG">
-        <a href="https://www.twitter.com"><img src="Imagenes/twitter.png" alt="No se ha podido cargar la imagen"></a> 
+        <a href="https://twitter.com/acdc"><img src="Imagenes/twitter.png" alt="No se ha podido cargar la imagen"></a> 
         </div>
         
     </div>

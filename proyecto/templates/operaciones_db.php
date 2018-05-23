@@ -1,14 +1,9 @@
 <?php
 function db_conectar(){
-
 	$servername = "localhost";
-	$username = "root";
-	$password = "admin";
+	$username = "mianbr1718";
+	$password = "mA29PIX8";
 	$dbname = "mianbr1718";
-	// $servername = "localhost";
-	// $username = "mianbr1718";
-	// $password = "mA29PIX8";
-	// $dbname = "mianbr1718";
 
 
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -159,7 +154,7 @@ function db_borrar_conciertos($fecha){
 function db_borrar_biografia($id){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$conn = db_conectar();
-		$fecha = $conn->real_escape_string($id);
+		$id = $conn->real_escape_string($id);
 
 		$result = $conn->query("DELETE FROM biografia WHERE id='$id'");
 		$conn->close();

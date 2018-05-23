@@ -5,11 +5,11 @@ function opciones_gestor(){
 	if ($_SESSION["tipo_user"] === "gestor"){
 		$href = ["consulta", "historico", "precio", "logout"];
 		$name = ["Consultar peticiones pendientes", "Consultar historico", "Editar precio discos", "Desconectarse"];
-		echo '<div align="center">';
+		echo '<div id="panel_control" align="center">';
 			echo '<div class="login">';
 				echo "<ul>";
 				foreach($href as $i => $val){
-					echo "<li><a href='dashboard.php?accion=$val'>{$name[$i]}</a></li>";
+					echo "<li><a href='dashboard.php?accion=$val#panel_control'>{$name[$i]}</a></li>";
 				}
 				echo "</ul>";
 			echo "</div>";

@@ -5,7 +5,7 @@ $error = "";
 
 // Si el usuario ya estaba logueado se le manda a su panel de administracion
 if ($esta_logueado){
-	header("Location: dashboard.php");
+	header("Location: dashboard.php#panel_control");
 	die();
 }
 
@@ -31,7 +31,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])){
 		$_SESSION["telefono"] = $row["Telefono"];
 		$_SESSION["opcion"] = "";
 
-		header("Location: dashboard.php");
+		header("Location: dashboard.php#panel_control");
 		die();
 	} else {
 		// Si no se encuentra al usuario se muestra un error
@@ -43,7 +43,7 @@ HTMLinicio("Login");
 echo $error;
 ?>
 <div>
-	<form method="POST" action="login.php">
+	<form id="panel_control" method="POST" action="login.php">
 		<fieldset>
 			<label for="email">Email:</label><br>
 			<input type="text" id="email" name="email" value="<?php if (isset($_POST['email'])) echo $_POST["email"] ?>"><br>
