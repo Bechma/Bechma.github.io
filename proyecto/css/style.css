@@ -5,14 +5,19 @@ header img {
     margin: auto;
     padding-bottom: 1%;
 }
-.img{
-    text-align: center;
-}
+ /*display: flex; Debo ponero para poder jugar con el aside y main*/
+    /*float: left;*/
+
 .estructura{
   margin: 1%;
   display: flex;
   justify-content: space-around;
+  overflow: auto;/*para que el contenedor se estructure por igual y el footer se vaya abajo*/
+  flex-direction: row;
 }
+
+
+
 body {
     background: url("../Imagenes/fondo.jpg") no-repeat;
     background-size: cover;
@@ -22,10 +27,12 @@ body {
     font-size: 16px;
     font-family: fantasy;
 }
-.estructura  .img{
+.img{
     text-align: center;
 
 }
+
+
 nav {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -51,19 +58,6 @@ p{
 }  
 a:visited { color:rgb(255, 255, 255); }/* NO ME FUNCIONA EN SAFARI*/
 a:hover{ color: rgb(255, 154, 15); }
-
-
-
-
-
-    /*display: flex; Debo ponero para poder jugar con el aside y main*/
-    /*float: left;*/
-.estructura{/*Esto con flexbox sobra*/
-    overflow: auto;/*para que el contenedor se estructure por igual y el footer se vaya abajo*/
-    flex-direction: row;
-}
-
-   
 
 .columIZQ{ /*main*/   /*COMO HACER QUE FOOTER SE PONGA ABAJO*/
     box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
@@ -99,6 +93,8 @@ a:hover{ color: rgb(255, 154, 15); }
     padding: 30px;
     order: 3;
 }
+
+
 .columDRCH2 h3{
     color: brown;
     font-size: 2em;
@@ -323,10 +319,13 @@ div > .boton-carro{
 }
 
 .flex-disco{
+    align-items: center;/*centra todos los div que tenga en su interior en la tienda*/
     display:flex;
     flex-direction:column;
     width: 33%;
+    justify-content: space-between; /*space-betwen hace que digamos un alineamiento para que el contenedor carrito y el titulo en tienda lo ponga a la misma altura  */
 }
+.flex-disco > 
 
 .centrar{
     text-align: center;
@@ -344,3 +343,35 @@ div > .boton-carro{
 .boton-carro > img, .boton-carro > span {
     vertical-align: middle;
 }
+
+#foot{
+    
+    justify-content: center;
+    
+    display: flex;
+    margin: 0%;
+    overflow: auto;/*para que el contenedor se estructure por igual y el footer se vaya abajo*/
+    flex-direction: row;
+
+}
+.footIMG {
+    
+    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
+    width: 5%;
+    text-align: center;
+    padding: 10px;
+    
+}
+.footIMG  img{
+    width: 100%;
+}
+.footIMG  img:hover{
+    opacity: 0.5;
+}
+footer p{
+    text-align: center;
+}
+
+
+
+

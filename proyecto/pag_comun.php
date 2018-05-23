@@ -35,7 +35,21 @@ function HTMLfin()
 {
 	echo <<<HTML
 <footer>
+    <div id="foot">
+        
+        <div class="footIMG">
+        <a href="https://www.instagram.com"><img src="Imagenes/insta.png" alt="No se ha podido cargar la imagen"> </a>
+        </div>
+        <div class="footIMG">
+        <a href="https://www.facebook.com"><img src="Imagenes/facebook.png" alt="No se ha podido cargar la imagen"></a>     
+        </div>
+        <div class="footIMG">
+        <a href="https://www.twitter.com"><img src="Imagenes/twitter.png" alt="No se ha podido cargar la imagen"></a> 
+        </div>
+        
+    </div>
     <p> Copyright &copy; Todos los derechos reservados 2017-2018</p>
+ 
 </footer>
 </body>
 </html>
