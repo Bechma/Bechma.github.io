@@ -71,3 +71,36 @@ function db_borrar_usuario($email){
 	}
 	return "";
 }
+
+function db_gestionar_pedido(){
+	if (isset($_POST['id'], $_POST['EmailGestor'], $_POST['TextoEmail'], $_POST['Fecha'], $_POST['EstadoNuevo']) && !isset($_POST['cancelar'])){
+		$conn = db_conectar();
+
+		$id = $conn->real_escape_string($_POST['id']);
+		$mail = $conn->real_escape_string($_POST['EmailGestor']);
+		$texto = $conn->real_escape_string($_POST['TextoEmail']);
+		$fecha = $conn->real_escape_string($_POST['Fecha']);
+		$estado = $conn->real_escape_string($_POST['EstadoNuevo']);
+
+		$result = $conn->query("UPDATE pedidos SET EmailGestor='$mail', TextoEmail = '$texto', Fecha='$fecha', Estado='$estado' WHERE id='$id'");
+
+		$conn->close();
+		return $result;
+	}
+	return "";
+}
+
+function db_mod_precio(){
+	if(isset($_POST["Nombre"], $_POST["NuevoPrecio"]) && !isset($_POST['cancelar'])){
+		$conn = db_conectar();
+
+		$precio = $conn->real_escape_string($_POST['NuevoPrecio']);
+		$nombredisco = $conn->real_escape_string($_POST['Nombre']);
+
+		$result = $conn->query("UPDATE discos SET Precio='$precio' WHERE Nombre='$nombredisco'");
+		
+		$conn->close();
+		return $result;
+	}
+	return "";
+}
