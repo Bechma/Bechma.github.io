@@ -5,16 +5,27 @@ function opciones_gestor(){
 	if ($_SESSION["tipo_user"] === "gestor"){
 		$href = ["consulta", "historico", "precio", "logout"];
 		$name = ["Consultar peticiones pendientes", "Consultar historico", "Editar precio discos", "Desconectarse"];
+<<<<<<< HEAD
 		echo '<div align="center">';
 			echo '<div class="login">';
 				echo "<ul>";
 				foreach($href as $i => $val){
 				echo "<li><a href='dashboard.php?accion=$val'>{$name[$i]}</a></li>";
+=======
+		echo '<div id="panel_control" align="center">';
+			echo '<div class="login">';
+				echo "<ul>";
+				foreach($href as $i => $val){
+					echo "<li><a href='dashboard.php?accion=$val#panel_control'>{$name[$i]}</a></li>";
+>>>>>>> dce14f5bec4d95437713770b4c8ddd5cb26b30c5
 				}
 				echo "</ul>";
 			echo "</div>";
 		echo "</div>";
+<<<<<<< HEAD
 		
+=======
+>>>>>>> dce14f5bec4d95437713770b4c8ddd5cb26b30c5
 		acciones();
 	}
 }
@@ -94,6 +105,7 @@ function acciones(){
 				echo "<p>Elija una opcion</p>";
 				break;
 		}
+<<<<<<< HEAD
 	} else echo "<p>Elija una opcion</p>";
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -308,4 +320,7 @@ function form_modprecio($location, $extra="true"){
 		</div>	
 
 	";
+=======
+	} else echo "<p class='h1login'>Elija una opcion</p>";
+>>>>>>> dce14f5bec4d95437713770b4c8ddd5cb26b30c5
 }

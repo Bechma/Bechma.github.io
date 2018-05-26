@@ -5,7 +5,7 @@ $error = "";
 
 // Si el usuario ya estaba logueado se le manda a su panel de administracion
 if ($esta_logueado){
-	header("Location: dashboard.php");
+	header("Location: dashboard.php#panel_control");
 	die();
 }
 
@@ -29,11 +29,16 @@ if (isset($_POST["email"]) && isset($_POST["password"])){
 		$_SESSION["email"] = $row["Email"];
 		$_SESSION["tipo_user"] = $row["TipoUser"];
 		$_SESSION["telefono"] = $row["Telefono"];
-		$_SESSION["opcion"] = "";
 
-		header("Location: dashboard.php");
+		// Registrar que se ha identificado el usuario
+		db_log("Usuario con email: {$_SESSION['email']} y rol {$_SESSION['tipo_user']} se ha logueado");
+
+		header("Location: dashboard.php#panel_control");
 		die();
 	} else {
+		// Registrar intentos fallidos de login en el log
+		db_log("Intento fallido de login: email=$email pass={$_POST['password']}");
+
 		// Si no se encuentra al usuario se muestra un error
 		$error = "<p class='error'>Error, usuario o contraseña incorrecto.</p>";
 	}
@@ -43,7 +48,7 @@ HTMLinicio("Login");
 echo $error;
 ?>
 <div>
-	<form method="POST" action="login.php">
+	<form id="panel_control" method="POST" action="login.php">
 		<fieldset>
 			<label for="email">Email:</label><br>
 			<input type="text" id="email" name="email" value="<?php if (isset($_POST['email'])) echo $_POST["email"] ?>"><br>
