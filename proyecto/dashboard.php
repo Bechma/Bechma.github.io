@@ -3,6 +3,8 @@ require_once "templates/manejar_sesion.php";
 if (!$esta_logueado){
 	back2login();
 } elseif (isset($_REQUEST["accion"]) && $_REQUEST["accion"] === "logout"){
+	require_once "templates/operaciones_db.php";
+	db_log("El usuario {$_SESSION['email']} ha hecho logout");
 	logout();
 }
 

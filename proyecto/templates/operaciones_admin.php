@@ -266,6 +266,7 @@ function acciones(){
 					listar_usuarios();
 				break;
 			case "log":
+				listar_log();
 				break;
 			default:
 				echo "<p class='h1login'>Elija una opcion</p>";
@@ -787,11 +788,27 @@ function form_biografia($location, $extra="true"){
 }
 
 
-
-
-
-function imprimir_formulario($name, $value){
-	$storage = "<form method='post' action='".htmlspecialchars($_SERVER["PHP_SELF"])."'>";
-	$storage .= "<input type='submit' name='$name' value='$value'></form>";
-	return $storage;
+function listar_log(){
+	$conn = db_conectar();
+	$result = $conn->query("SELECT * FROM log");
+	echo "
+<table border='2' align='center'>
+<thead>
+	<tr>
+		<th>ID</th>
+		<th>Texto</th>
+	</tr>
+</thead>
+<tbody>";
+	while ( $row = $result->fetch_assoc() ){
+		echo "
+<tr>
+	<td>".htmlentities($row["id"])."</td>
+	<td>".htmlentities($row["descripcion"])."</td>
+</tr>";
+	}
+	echo "
+	</tbody>
+	</table>";
+	$conn->close();
 }
