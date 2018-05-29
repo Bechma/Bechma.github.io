@@ -1,14 +1,14 @@
 <?php
 function db_conectar(){
-	// $servername = "localhost";
-	// $username = "mianbr1718";
-	// $password = "mA29PIX8";
-	// $dbname = "mianbr1718";
+	 $servername = "localhost";
+	 $username = "mianbr1718";
+	 $password = "mA29PIX8";
+	 $dbname = "mianbr1718";
 
-	$servername = "localhost";
-	$username = "root";
-	$password = "admin";
-	$dbname = "mianbr1718";
+//	$servername = "localhost";
+//	$username = "root";
+//	$password = "admin";
+//	$dbname = "mianbr1718";
 
 
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -175,6 +175,8 @@ function db_gestionar_pedido(){
 		$estado = $conn->real_escape_string($_POST['EstadoNuevo']);
 
 		$result = $conn->query("UPDATE pedidos SET EmailGestor='$mail', TextoEmail = '$texto', Fecha='$fecha', Estado='$estado' WHERE id='$id'");
+		db_log("El usuario {$_SESSION['email']} ha gestionado un pedido");
+		$conn->close();
 		return $result;
 	}
 	return "";
@@ -201,6 +203,7 @@ function db_mod_precio(){
 		$nombredisco = $conn->real_escape_string($_POST['Nombre']);
 
 		$result = $conn->query("UPDATE discos SET Precio='$precio' WHERE Nombre='$nombredisco'");
+		db_log("El usuario {$_SESSION['email']} ha modificado el precio de $nombredisco");
 		
 		$conn->close();
 		return $result;

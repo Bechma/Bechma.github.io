@@ -258,7 +258,7 @@ function form_pedido($location, $extra="true"){
 				<br>
 				<label for='EmailGestor'>Email del Gestor Asociado: </label>
 				<input type='text' id='EmailGestor' name='EmailGestor'
-				value='" . (isset($_POST['EmailGestor']) ? $_POST['EmailGestor'] : '') . "'readonly>
+				value='" . (isset($_POST['EmailGestor']) ? $_POST['EmailGestor'] : '') . "' readonly>
 				<br>
 				<label for='Fecha'>Fecha: </label>
 				<input type='text' id='Fecha' name='Fecha'
