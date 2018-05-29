@@ -29,12 +29,13 @@ function acciones(){
 		switch ($_REQUEST["accion"]){
 			case "componentes":
 				break;
+			//-----------------------------------------------------------BIOGRAFIA-------------------------------------------------------------------
 			case "biografia":
 			if (isset($_POST["borrar_parrafo"])){
 				db_borrar_biografia($_POST["borrar_parrafo"]);
 				listar_biografia();
 			}
-			elseif (isset($_REQUEST["parrafo_add"])){
+			elseif (isset($_REQUEST["parrafo_add"])){  //$_REQUEST CONTIEN EL $_POST $_GET , $_COOKIEy las variables que se pasen por href
 				insertar_biografia();
 			}
 			elseif (isset($_POST["parrafo_add2"]) && !isset($_POST["cancelar"])){
@@ -68,7 +69,7 @@ function acciones(){
 				else {
 					if($_POST['cancelar'])
 					{
-						echo "<p class='correcto' >Accion Cancelada correctamente</p>";
+						echo "<p id='cancelacion' class='correcto' >Accion Cancelada correctamente</p>";
 					}
 					else
 					{
@@ -81,9 +82,71 @@ function acciones(){
 			else
 				listar_biografia();
 				break;
-
+			//--------------------------------------------------------------DISCOGRAFIA----------------------------------------------------------------
 			case "discografia":
+			if (isset($_POST["borrar_discos"]))
+			{
+				db_borrar_discos($_POST["borrar_disco"]);
+				echo "<p class='correcto'>Disco borrado correctamente</p>";
+				listar_discos();
+			}
+			elseif (isset($_REQUEST["disco_add"]))
+			{
+				insertar_disco();
+			}
+			elseif (isset($_POST["disco_add2"]) && !isset($_POST["cancelar"]))
+			{
+				
+				$result = db_insertar_disco();
+				if ($result === TRUE){
+					echo "<p class='correcto'>Disco insertado correctamente</p>";
+					listar_discos();
+				}
+				elseif ($result === "nombre"){
+					echo "<p class='error'>Nombre no valido</p>";
+					insertar_disco();
+				}
+				else {
+					echo "<p class='error'>Se ha producido un error, vuelve a intentarlo";
+					insertar_disco();
+				}
+			}
+			elseif (isset($_REQUEST["disco_mod"]))
+			{
+				//echo "VAMOS AL LIO";
+				modificar_disco(base64_decode($_REQUEST["disco_mod"]));
+			}
+			elseif (isset($_POST["disco_mod2"]))
+			{
+				//echo "VAMOS AL LIO22";
+				$result = db_modificar_disco();
+				if ($result === TRUE){
+					echo "<p class='correcto'>Concierto modificado correctamente</p>";
+					listar_discos();
+				}
+				elseif ($result === "nombre"){
+					echo "<p class='error'>Nombre no valido</p>";
+					modificar_disco($_POST["disco_mod2"]);
+				}
+				else 
+				{
+					if($_POST['cancelar'])
+					{
+						echo "<p id='cancelacion' class='correcto'>Accion Cancelada correctamente</p>";
+					}
+					else
+					{
+						echo "<p class='error'>Se ha producido un error, vuelve a intentarlo";
+						modificar_disco($_POST["disco_mod2"]);
+					}
+					
+				}
+			}
+			else
+				listar_discos();
 				break;
+
+			//-------------------------------------------------------------CONCIERTOS-----------------------------------------------------------------
 			case "conciertos":
 
 			if (isset($_POST["borrar_conciertos"]))
@@ -134,7 +197,7 @@ function acciones(){
 				{
 					if($_POST['cancelar'])
 					{
-						echo "<p class='correcto'>Accion Cancelada correctamente</p>";
+						echo "<p id='cancelacion' class='correcto'>Accion Cancelada correctamente</p>";
 					}
 					else
 					{
@@ -148,7 +211,7 @@ function acciones(){
 				listar_conciertos();
 
 			break;
-
+			//------------------------------------------------------------USUARIOS------------------------------------------------------------------
 
 			case "usuarios":
 				if (isset($_POST["borrar_user"])){
@@ -189,7 +252,7 @@ function acciones(){
 					else {
 						if($_POST['cancelar'])
 						{
-							echo "<p class='correcto' >Accion Cancelada correctamente</p>";
+							echo "<p id='cancelacion' class='correcto' >Accion Cancelada correctamente</p>";
 						}
 						else
 						{
@@ -212,6 +275,8 @@ function acciones(){
 }
 
 //------------------------------------------------------------------------------------LISTADOS----------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------------
 function listar_conciertos()
 {
 	$conn = db_conectar();
@@ -251,7 +316,7 @@ HTML;
 	<td>".htmlentities($row["Lugar"])."</td>
 	<td>".htmlentities($row["Descripcion"])."</td>
 	<td><input class='admin-botones' type='button' value='Borrar' name='".base64_encode($row["Fecha"])."' onclick='eliminar(this)'>
-		<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=conciertos&conciertos_mod=".base64_encode($row["Fecha"])."'>Modificar</a></td>
+		<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=conciertos&conciertos_mod=".base64_encode($row["Fecha"])."#modificar'>Modificar</a></td>
 	</tr>";
 	}
 
@@ -259,12 +324,65 @@ HTML;
 	</tbody>
 	</table>
 	<div align='center'>
-	<a role='button'  class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=conciertos&conciertos_add=true'>Agregar concierto</a>
+	<a role='button'  class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=conciertos&conciertos_add=true#inserccion'>Agregar concierto</a>
 	</div>";
 	$conn->close();
 }
-//----------------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------LISTADOS----------------------------------------------------------------
+//----------------------------------------------------------------------DISCOS------------------------------------------------------------------------------
+function listar_discos()
+{
+	$conn = db_conectar();
+	$result = $conn->query("SELECT * FROM discos");
+	echo <<<HTML
+	<script type='text/javascript'>
+	function eliminar(objButton) {
+	  const Id = atob(objButton.name);
+	  if (window.confirm('Desea eliminar a ' + Id + '???')){
+	  	let ajax = new XMLHttpRequest();
+	  	ajax.open('POST', 'dashboard.php');
+	  	ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	  	ajax.onreadystatechange = () => {
+	  		if (ajax.status === 200 && ajax.readyState === 4)
+	  			objButton.parentNode.parentNode.parentNode.removeChild(objButton.parentNode.parentNode);
+	  	};
+	  	ajax.send('accion={$_REQUEST["accion"]}&borrar_conciertos='+Id);
+	  } 
+	}
+	</script>
+	<table border='2' align='center'>
+	<thead>
+		<tr>
+			<th>Nombre</th>
+			<th>Precio</th>
+			<th>Fecha Publicacion</th>
+			<th>Imagen</th>
+			<th>Descripcion</th>
+		</tr>
+	</thead>
+	<tbody>
+HTML;
+while ($row=mysqli_fetch_array($result)){
+		echo "
+	<tr>
+	<td>".htmlentities($row["Nombre"])."</td>
+	<td>".htmlentities($row["Precio"])."</td>
+	<td>".htmlentities($row["FechaPublicacion"])."</td>
+	<td>".htmlentities($row["Imagen"])."</td>
+	<td>".htmlentities($row["Descripcion"])."</td>
+	<td><input class='admin-botones' type='button' value='Borrar' name='".base64_encode($row["Nombre"])."' onclick='eliminar(this)'>
+		<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=discografia&disco_mod=".base64_encode($row["Nombre"])."#modificar'>Modificar</a></td>
+	</tr>";
+	}
+
+	echo "
+	</tbody>
+	</table>
+	<div align='center'>
+	<a role='button'  class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=discografia&disco_add=true#inserccion'>Agregar Parrafo</a>
+	</div>";
+	$conn->close();
+}
+//------------------------------------------------------------------------------------BIOGRAFIA----------------------------------------------------------------
 function listar_biografia()
 {
 	$conn = db_conectar();
@@ -300,7 +418,7 @@ while ($row=mysqli_fetch_array($result)){
 	<td>".htmlentities($row["id"])."</td>
 	<td>".htmlentities($row["texto"])."</td>
 	<td><input class='admin-botones' type='button' value='Borrar' name='".base64_encode($row["id"])."' onclick='eliminar(this)'>
-		<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=biografia&parrafo_mod=".base64_encode($row["id"])."'>Modificar</a></td>
+		<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=biografia&parrafo_mod=".base64_encode($row["id"])."#modificar'>Modificar</a></td>
 	</tr>";
 	}
 
@@ -308,11 +426,11 @@ while ($row=mysqli_fetch_array($result)){
 	</tbody>
 	</table>
 	<div align='center'>
-	<a role='button'  class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=biografia&parrafo_add=true'>Agregar Parrafo</a>
+	<a role='button'  class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=biografia&parrafo_add=true#inserccion'>Agregar Parrafo</a>
 	</div>";
 	$conn->close();
 }
-//----------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------USUARIOS---------------------------------------------------------------------------------
 
 
 
@@ -360,7 +478,7 @@ function listar_usuarios(){
 	<td>".htmlentities($row["TipoUser"])."</td>
 	<td>".htmlentities($row["Telefono"])."</td>
 	<td><input class='admin-botones' type='button' value='Borrar' name='".base64_encode($row["Email"])."' onclick='eliminar(this)'>
-		<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=usuarios&usuarios_mod=".base64_encode($row["Email"])."'>Modificar</a></td>
+		<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=usuarios&usuarios_mod=".base64_encode($row["Email"])."#modificar'>Modificar</a></td>
 </tr>";
 	}
 
@@ -368,12 +486,14 @@ function listar_usuarios(){
 	</tbody>
 	</table>
 	<div align='center'>
-	<a role='button'  class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=usuarios&usuarios_add=true'>Agregar usuario</a>
+	<a role='button'  class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=usuarios&usuarios_add=true#inserccion'>Agregar usuario</a>
 	</div>";
 	$conn->close();
 }
 
 //---------------------------------------------------------------------------------------MODIFICACIONES-------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function modificar_usuario($email){
 	$conn = db_conectar();
@@ -387,12 +507,49 @@ function modificar_usuario($email){
 		$_POST["password"] = $row["Password"];
 		$_POST["telefono"] = $row["Telefono"];
 		$_POST["tipo"] = $row["TipoUser"];
-		echo "<h1 class='h1login'>Modificar Usuario</h1>";
+		echo "<h1 id='modificar' class='h1login'>Modificar Usuario</h1>";
 		form_usuario("usuarios_mod2", $email);
 	} else
 		echo "<p class='error'>ERROR</p>";
 }
-//-------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function modificar_disco($nombre){
+	$conn = db_conectar();
+	$result = $conn->query("SELECT * FROM discos WHERE Nombre='$nombre'");
+	$conn->close();
+	if ($result !== FALSE && $result->num_rows === 1){
+		$row = $result->fetch_assoc();
+		$_POST["nombre"] = $row["Nombre"];
+		$_POST["precio"] = $row["Precio"];
+		$_POST["fechapublicacion"] = $row["FechaPublicacion"];
+		$_POST["descripcion"] = $row["Descripcion"];
+		$conn = db_conectar();
+		$result = $conn->query("SELECT * FROM canciones WHERE Disco='$nombre'");
+		$conn->close();
+		//if(mysqli_num_rows($res)>0)
+		if ($result !== FALSE && $result->num_rows > 1)
+		{	
+			while ($cancion=mysqli_fetch_array($result))
+			{
+				//$canciones[]=$cancion;
+				$_POST["titulo"][]=$cancion["Titulo"];
+				$_POST["duracion"][]=$cancion["Duracion"];
+				//$_POST["titulo"][]=$cancion["Titulo"];  NO tiene sentio cambiar el disco, para eso la eliminas
+
+			}
+			//print_r($_POST["titulo"]);
+		}
+		else
+		{
+			echo "<p class='error'>ERROR disco2</p>";
+		}
+		echo "<h1 id='modificar' class='h1login'>Modificar Disco</h1>";
+		form_disco("disco_mod2", $nombre);
+	} else
+		echo "<p class='error'>ERROR disco1</p>";
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function modificar_concierto($fecha){
 	$conn = db_conectar();
@@ -404,8 +561,7 @@ function modificar_concierto($fecha){
 		$_POST["hora"] = $row["Hora"];
 		$_POST["lugar"] = $row["Lugar"];
 		$_POST["descripcion"] = $row["Descripcion"];
-		
-		echo "<h1 class='h1login'>Modificar Concierto</h1>";
+		echo "<h1 id='modificar' class='h1login'>Modificar Concierto</h1>";
 		form_concierto("conciertos_mod2", $fecha);
 	} else
 		echo "<p class='error'>ERROR</p>";
@@ -421,7 +577,7 @@ function modificar_biografia($id){
 		$_POST["id"] = $row["id"];
 		$_POST["texto"] = $row["texto"];
 		
-		echo "<h1 class='h1login'>Modificar Parrafo</h1>";
+		echo "<h1 id='modificar' class='h1login'>Modificar Parrafo</h1>";
 		//print_r($id);
 		form_biografia("parrafo_mod2", $id);
 	} else
@@ -429,19 +585,25 @@ function modificar_biografia($id){
 }
 //-------------------------------------------------------------------------------------------------------
 
+function insertar_disco(){
+	echo "<p id='inserccion' class='correcto'>Inserta un nuevo disco:</p>";
+	form_disco("disco_add2");
+}
+//-------------------------------------------------------------------------------------------------------
+
 function insertar_usuario(){
-	echo "<p class='correcto'>Inserta un nuevo usuario:</p>";
+	echo "<p id='inserccion' class='correcto'>Inserta un nuevo usuario:</p>";
 	form_usuario("usuarios_add2");
 }
 //-------------------------------------------------------------------------------------------------------
 
 function insertar_concierto(){
-	echo "<p class='correcto'>Inserta un nuevo concierto:</p>";
+	echo "<p  id='inserccion' class='correcto'>Inserta un nuevo concierto:</p>";
 	form_concierto("conciertos_add2");
 }
 //-------------------------------------------------------------------------------------------------------
 function insertar_biografia(){
-	echo "<p class='correcto'>Inserta un nuevo Parrafo:</p>";
+	echo "<p id='inserccion' class='correcto'>Inserta un nuevo Parrafo:</p>";
 	form_biografia("parrafo_add2");
 }
 //-------------------------------------------------------------------------------------------------------
@@ -493,14 +655,73 @@ function form_usuario($location, $extra="true"){
 				<input type='hidden' name='accion' value='usuarios'>
 				<input type='hidden' name='$location' value='$extra'>
 				<input type='submit' value='Enviar'>
-				<input type='submit' name='cancelar' value='Cancelar'>
+				<input type='submit' name='cancelar' value='Cancelar' href='#cancelacion'>
 			</form>
 			</div>
 		</div>	
 ";
 }
+//-------------------------------------------------------------------------------------------------------
+function form_disco($location, $extra="true"){
+	
+	if(isset($_POST['nombre']))
+		$nombre=$_POST['nombre'];
+	else $nombre='';
 
-
+	if(isset($_POST['precio']))
+		$precio=$_POST['precio'];
+	else $precio='';
+	if(isset($_POST['fechapublicacion']))
+		$fechapublicacion=$_POST['fechapublicacion'];
+	else $fechapublicacion='';
+	if(isset($_POST['descripcion']))
+		$descripcion=$_POST['descripcion'];
+	else $descripcion='';
+	
+	echo <<<HTML
+	<div align='center'>	
+		<div class='login'>
+			<form method='post' action='htmlspecialchars({$_SERVER["PHP_SELF"]})'>
+				
+				
+				<label for='nombre'>Nombre: </label>
+				<input type='text' id='nombre' name='nombre' value='$nombre' required>
+				<br>
+				<label for='precio'>Precio: </label>
+				<input type='text' id='precio' name='precio' value='$precio'>
+				<br>
+				<label for='fechapublicacion'>FechaPublicacion: </label>
+				<input type='text' id='fechapublicacion' name='fechapublicacion' value='$fechapublicacion' >
+				<br>
+				<label for='lugar'>Descripcion: </label><br>
+				<textarea id='descripcion' name='descripcion' cols='50' rows='10'>$descripcion</textarea>
+				<br>
+				<label for='lugar'>Canciones: </label><br>
+HTML;
+				if(isset($_POST["titulo"]) && isset($_POST['duracion']))
+				{
+					print_r($_POST["titulo"]);
+					print_r($_POST["duracion"]);
+					 echo "<input type='text' size='40' id='titulo' name='{$_POST['titulo'][0]}' value='{$_POST['titulo'][0]}' >";
+					// echo "<input type='text' size='10'id='duracion' name='{$_POST[duracion][0]}' value='{$_POST[duracion][0]}' >";
+					// // for($i=0;count($_POST['titulo']);$i++)
+					// {
+					// 	echo "<input type='text' id='titulo' name='{$_POST[titulo][$i]}}' value='{$_POST[titulo][$i]}' >";
+					// 	echo "<input type='text' id='duracion' name='{$_POST[duracion][$i]}}' value='{$_POST[duracion][$i]}' >";
+					// }
+					
+				}
+			echo <<<HTML
+				<input type='hidden' name='accion' value='conciertos'>
+				<input type='hidden' name='$location' value='$extra'>
+				<input type='submit' value='Enviar'>
+				<input type='submit' name='cancelar' value='Cancelar' href='#cancelacion'>
+			</form>
+			</div>
+		</div>	
+HTML;
+}
+//-------------------------------------------------------------------------------------------------------
 function form_concierto($location, $extra="true"){
 	
 		
@@ -531,7 +752,7 @@ function form_concierto($location, $extra="true"){
 				<input type='hidden' name='accion' value='conciertos'>
 				<input type='hidden' name='$location' value='$extra'>
 				<input type='submit' value='Enviar'>
-				<input type='submit' name='cancelar' value='Cancelar'>
+				<input type='submit' name='cancelar' value='Cancelar' href='#cancelacion'>
 			</form>
 			</div>
 		</div>	
@@ -558,7 +779,7 @@ function form_biografia($location, $extra="true"){
 				<input type='hidden' name='accion' value='biografia'>
 				<input type='hidden' name='$location' value='$extra'>
 				<input type='submit' value='Enviar'>
-				<input type='submit' name='cancelar' value='Cancelar'>
+				<input type='submit' name='cancelar' value='Cancelar' href='#cancelacion'>
 			</form>
 			</div>
 		</div>	

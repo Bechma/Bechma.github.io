@@ -3,9 +3,9 @@ require_once "templates/operaciones_db.php";
 require_once "pag_comun.php";
 $conn = db_conectar();
 if (!isset($_GET["disco"])){
-	$result = $conn->query("SELECT * FROM discos LIMIT 1,1");
+	$result = $conn->query("SELECT * FROM discos LIMIT 1,1");//Limit: coge todas las primera columna de la tabla osea NOMBRE
 	if ($result !== FALSE && $result->num_rows > 0){
-		header("Location: {$_SERVER['PHP_SELF']}?disco=".$result->fetch_assoc()["Nombre"]);
+		header("Location: {$_SERVER['PHP_SELF']}?disco=".$result->fetch_assoc()["Nombre"]); //??
 		die();
 	}
 }

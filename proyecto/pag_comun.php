@@ -10,30 +10,35 @@ function HTMLinicio($titulo)
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>$titulo</title>
+    
+    <script src="javascript/menu.js"></script>
     <link rel="icon" sizes="16x16" href="Imagenes/icono.jpg">
 </head>
 <body>
     <header>
      <img src="Imagenes/img10.jpg" alt="No se ha podido cargar la imagen">     
     </header>
-
-	<nav>
-        <ul>
+    
+        <nav class="menuNav" id="myNav">
+            <ul>
 HTML;
-	$items = ["Inicio", "Biografia", "Discografia", "Conciertos", "Tienda", "Login"];
-	$links = ["index.php", "biografia.php", "discografia.php", "conciertos.php", "tienda.php", "login.php"];
-	foreach ($items as $k => $v)
-		echo "<li><a" . ($v === $titulo ? " class='active'" : "") . " href='{$links[$k]}'>$v</a></li>";
-	echo <<<HTML
-     </ul>
-    </nav>
+        $items = ["Inicio", "Biografia", "Discografia", "Conciertos", "Tienda", "Login"];
+        $links = ["index.php", "biografia.php", "discografia.php", "conciertos.php", "tienda.php", "login.php"];
+        foreach ($items as $k => $v)
+            echo "<li><a" . ($v === $titulo ? " class='active'" : "") . " href='{$links[$k]}'>$v</a></li>";
+        echo <<<HTML
+        </ul>
+        </nav>
+        
+
 HTML;
 }
 
 //------------------------------------------------------------------------------------------------------
 function HTMLfin()
 {
-	echo <<<HTML
+    echo <<<HTML
+    </div>
 <footer>
     <div id="foot">
         

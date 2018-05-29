@@ -33,13 +33,19 @@ body {
 }
 
 
-nav, footer {
+nav {
+    
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: rgba(230, 20, 20, 0.5) ;
     color: beige;
     border: groove;
 }
+/* .menu-fixed
+{
+    position: fixed;
+    width: 100%;
+} */
 nav  > ul{
     display: flex; /*PARA PODER PONERLAS HORIZONTAL*/
     justify-content: space-around;/* eSPACIO ENTRE ELLA*/
@@ -47,6 +53,13 @@ nav  > ul{
     color: brown;
     
 }
+.sticky {
+    box-sizing: border-box;
+    position:sticky;
+    position:-webkit-sticky;
+     top: 0; 
+    width: 100%;
+  }
 
 p{
     text-align: justify;
@@ -242,6 +255,7 @@ aside .img{
 
 
 .admin-botones {
+    
     background-color: Crimson;
     border-radius: 5px;
     color: white;
@@ -342,7 +356,12 @@ div > .boton-carro{
 .boton-carro > img, .boton-carro > span {
     vertical-align: middle;
 }
+footer{
 
+    background-color: rgba(230, 20, 20, 0.5) ;
+    color: beige;
+    border: groove;
+}
 #foot{
     
     justify-content: center;
@@ -356,7 +375,7 @@ div > .boton-carro{
 .footIMG {
     
     box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
-    width: 5%;
+    width: 4%;
     text-align: center;
     padding: 10px;
     
@@ -369,6 +388,7 @@ div > .boton-carro{
 }
 footer p{
     text-align: center;
+    margin: 0%;
 }
 
 
