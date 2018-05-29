@@ -164,7 +164,6 @@ function db_borrar_conciertos($fecha){
 	return "";
 }
 
-<<<<<<< HEAD
 function db_gestionar_pedido(){
 	if (isset($_POST['id'], $_POST['EmailGestor'], $_POST['TextoEmail'], $_POST['Fecha'], $_POST['EstadoNuevo']) && !isset($_POST['cancelar'])){
 		$conn = db_conectar();
@@ -176,8 +175,11 @@ function db_gestionar_pedido(){
 		$estado = $conn->real_escape_string($_POST['EstadoNuevo']);
 
 		$result = $conn->query("UPDATE pedidos SET EmailGestor='$mail', TextoEmail = '$texto', Fecha='$fecha', Estado='$estado' WHERE id='$id'");
+		return $result;
+	}
+	return "";
+}
 
-=======
 function db_borrar_biografia($id){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$conn = db_conectar();
@@ -185,14 +187,12 @@ function db_borrar_biografia($id){
 
 		$result = $conn->query("DELETE FROM biografia WHERE id='$id'");
 		db_log("El usuario {$_SESSION['email']} ha borrado un párrafo de la biografía");
->>>>>>> dce14f5bec4d95437713770b4c8ddd5cb26b30c5
 		$conn->close();
 		return $result;
 	}
 	return "";
 }
 
-<<<<<<< HEAD
 function db_mod_precio(){
 	if(isset($_POST["Nombre"], $_POST["NuevoPrecio"]) && !isset($_POST['cancelar'])){
 		$conn = db_conectar();
@@ -207,11 +207,9 @@ function db_mod_precio(){
 	}
 	return "";
 }
-=======
 function db_log($text){
 	$conn = db_conectar();
 	$text = $conn->real_escape_string($text);
 	$conn->query("INSERT INTO log(descripcion) VALUES ('$text')");
 	$conn->close();
 }
->>>>>>> dce14f5bec4d95437713770b4c8ddd5cb26b30c5
