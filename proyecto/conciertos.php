@@ -25,20 +25,22 @@ $pos=($pos>$nRows)?$nRows:$pos;
 $sql = "SELECT * FROM conciertos order by fecha";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
-	echo "<table border='2'align='center'>
+	echo "<table border='2' align='center'>
 	<tr>
 		<th>Fecha</th><th>Hora</th><th>Lugar</th><th>Descripcion</th>
 	</tr>
 	";
 	while($row = $result->fetch_assoc()) {
+		$fecha = date("d/m/Y", $row["Fecha"]);
+		$hora = date("H:i", $row["Fecha"]);
 		echo "<tr>";
-		echo "<td>".$row["Fecha"]."</td>";
-		echo "<td>".$row["Hora"]."</td>";
+		echo "<td>$fecha</td>";
+		echo "<td>$hora</td>";
 		echo "<td>".$row["Lugar"]."</td>";
 		echo "<td>".$row["Descripcion"]."</td>";
 		echo "</tr>";
 	}
-	echo "</tr>\n</table>";
+	echo "</table>";
 } else {
 	echo "No hay conciertos que mostrar";
 }
