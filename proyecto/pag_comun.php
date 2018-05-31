@@ -1,5 +1,4 @@
 <?php
-require_once "templates/operaciones_db.php";
 //------------------------------------------------------------------------------------------------------
 function HTMLinicio($titulo)
 {
@@ -22,15 +21,13 @@ function HTMLinicio($titulo)
         <nav class="menuNav" id="myNav">
             <ul>
 HTML;
-        $items = ["Inicio", "Biografia", "Discografia", "Conciertos", "Tienda", "Login"];
-        $links = ["index.php", "biografia.php", "discografia.php", "conciertos.php", "tienda.php", "login.php"];
+        $items = ["Inicio", "Biografia", "Discografia", "Conciertos", "Tienda", "Buscar", "Login"];
+        $links = ["index.php", "biografia.php", "discografia.php", "conciertos.php", "tienda.php", "buscar.php", "login.php"];
         foreach ($items as $k => $v)
             echo "<li><a" . ($v === $titulo ? " class='active'" : "") . " href='{$links[$k]}'>$v</a></li>";
         echo <<<HTML
-        </ul>
+        	</ul>
         </nav>
-        
-
 HTML;
 }
 
