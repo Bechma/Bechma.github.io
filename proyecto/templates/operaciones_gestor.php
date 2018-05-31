@@ -13,7 +13,7 @@ function opciones_gestor(){
 				}
 				echo "</ul>";
 			echo "</div>";
-		echo "</div>";	
+		echo "</div>";
 		acciones();
 	}
 }
@@ -139,10 +139,16 @@ function listar_historico(){
 	$conn = db_conectar();
 	//Disco precio estado textomail y gestor
 	// aceptados por un lado y denegados por otro, ordenados por fecha
-	$result = $conn->query("SELECT O.Nombrediscos, D.Precio, P.Estado, P.TextoEmail, P.EmailGestor
-	FROM pedidos P
-	JOIN discospedidos O ON P.id = O.idpedidos
-	JOIN discos D ON O.Nombrediscos = D.Nombre WHERE P.Estado<>'En Espera' ORDER BY P.fecha") or die($conn->error);
+	
+	$discospedidos = $conn->query("SELECT * FROM discospedidos") or die($conn->error);
+	$discos = $conn->query("SELECT * FROM discos") or die($conn->error);
+	$pedidos = $conn->query("SELECT * FROM pedidos") or die($conn->error);
+
+	$precio_disco = [];
+
+	while ($row = $discos->fetch_assoc()){ //fetch_array?
+		$precio_disco[$row["Nombre"]] = $row["Precio"];
+	}
 	
 	echo <<<HTML
 	<table border='2' align='center'>
@@ -154,21 +160,48 @@ function listar_historico(){
 			<th>Estado</th>
 			<th>Texto Email</th>
 			<th>Gestor</th>
+			<th>Fecha</th>
 		</tr>
 	</thead>
 	<tbody>
 HTML;
-while ($row = $result->fetch_assoc()){
+$coste_pedido = [];
+while ($row = $discospedidos->fetch_assoc()){ //fetch_array?
+	if (isset($coste_pedido[$row["idpedido"]])){
+		$coste_pedido[$row["idpedido"]] += $row["Cantidad"] * $precio_disco[$row["Nombrediscos"]];
+	} else {
+		$coste_pedido[$row["idpedido"]] = $row["Cantidad"] * $precio_disco[$row["Nombrediscos"]];
+	}
+}
+	
+while($row = $pedidos->fetch_assoc()){
+
+	if($row["Estado"]== "Aceptado"){
 	echo"
 	<tr>
-	<td>".htmlentities($row["P.Id"])."</td>
-	<td>".htmlentities($row["D.Nombre"])."</td>
-	<td>".htmlentities($row["D.Precio"])."</td>
-	<td>".htmlentities($row["P.TextoEmail"])."</td>
-	<td>".htmlentities($row["P.Estado"])."</td>
+	<td>".htmlentities($row["id"])."</td>
+	<td>".htmlentities($coste_pedido[$row["id"]])."</td>
+	<td>".htmlentities($row["TextoEmail"])."</td>
+	<td>".htmlentities($row["EmailGestor"])."</td>
+	<td>".htmlentities($row["Fecha"])."</td>
+	<td>".htmlentities($row["Estado"])."</td>
 	</tr>";
+	}
+}
 
-	
+while($row = $pedidos->fetch_assoc()){
+
+	if($row["Estado"]== "Denegado"){
+	echo"
+	<tr>
+	<td>".htmlentities($row["id"])."</td>
+	<td>".htmlentities($coste_pedido[$row["id"]])."</td>
+	<td>".htmlentities($row["TextoEmail"])."</td>
+	<td>".htmlentities($row["EmailGestor"])."</td>
+	<td>".htmlentities($row["Fecha"])."</td>
+	<td>".htmlentities($row["Estado"])."</td>
+	</tr>";
+	}
 }
 echo "
 </tbody>
@@ -258,7 +291,7 @@ function form_pedido($location, $extra="true"){
 				<br>
 				<label for='EmailGestor'>Email del Gestor Asociado: </label>
 				<input type='text' id='EmailGestor' name='EmailGestor'
-				value='" . (isset($_POST['EmailGestor']) ? $_POST['EmailGestor'] : '') . "' readonly>
+				value='" . (isset($_POST['EmailGestor']) ? $_POST['EmailGestor'] : '') . "'readonly>
 				<br>
 				<label for='Fecha'>Fecha: </label>
 				<input type='text' id='Fecha' name='Fecha'
