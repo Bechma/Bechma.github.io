@@ -3,7 +3,7 @@ header img {
     width: 99%;
     display: block; /* Interpreto imagen como bloque y con margin auto se centra*/
     margin: auto;
-    padding-bottom: 1%;
+    
 }
  /*display: flex; Debo ponero para poder jugar con el aside y main*/
     /*float: left;*/
@@ -29,9 +29,25 @@ body {
 }
 .img{
     text-align: center;
+    
 
 }
+img {
+    border: 2px solid #c43131;
+}
+footer img {
+    border: 0;
+}
 
+.IndexParrafos
+{
+    margin-top: 5%;
+    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
+    align-items: center;
+    width: 80%;
+    
+    
+}
 
 nav {
     
@@ -73,16 +89,25 @@ a:visited { color:rgb(255, 255, 255); }/* NO ME FUNCIONA EN SAFARI*/
 a:hover{ color: rgb(255, 154, 15); }
 
 .columIZQ{ /*main*/   /*COMO HACER QUE FOOTER SE PONGA ABAJO*/
-    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
-    width: 60%;
-    padding: 30px;
-}
-.columDRCH{
-    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
-    width: 40%;
+    align-items: center;/*centra todos los div que tenga en su interior en la tienda*/
+    display:flex;
+    flex-direction:column;
+    width: 70%;
+    justify-content: space-between;
     text-align: center;
-    padding: 30px;
+   
+}
 
+.columDRCH{
+    margin-top: 3%;
+    box-sizing: border-box; /*El width no tenemos encuenta el padding y el margin*/
+    width: 20%;
+    text-align: center;
+    padding: 20px;
+}
+h2 ,h3 
+{
+    color: rgb(255, 154, 15);
 }
 
 
@@ -113,14 +138,14 @@ a:hover{ color: rgb(255, 154, 15); }
     font-size: 2em;
    
 }
-.columDRCH2 ul{
+.columDRCH2 ul, .columDRCH ul{
     list-style-type: none;
 }
-.columDRCH2 li{ /*--------------------------------*/
+.columDRCH2 li, .columDRCH li{ /*--------------------------------*/
     background-color: rgba(223, 16, 16, 0.5)
     
 }
-.columDRCH2 li:hover{
+.columDRCH2 li:hover, .columDRCH li:hover{
     background-color: rgba(8, 8, 8, 0.5)
 }
 tr:hover{

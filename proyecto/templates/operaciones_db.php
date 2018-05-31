@@ -1,14 +1,14 @@
 <?php
 function db_conectar(){
-	 $servername = "localhost";
-	 $username = "mianbr1718";
-	 $password = "mA29PIX8";
-	 $dbname = "mianbr1718";
+	//  $servername = "localhost";
+	//  $username = "mianbr1718";
+	//  $password = "mA29PIX8";
+	//  $dbname = "mianbr1718";
 
-//	$servername = "localhost";
-//	$username = "root";
-//	$password = "admin";
-//	$dbname = "mianbr1718";
+	$servername = "localhost";
+	$username = "root";
+	$password = "admin";
+	$dbname = "mianbr1718";
 
 
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -26,7 +26,6 @@ function db_modificar_usuario(){
 		$conn = db_conectar();
 
 		$old_email = $conn->real_escape_string($_POST["usuarios_mod2"]);
-		//print_r($old_email);
 		$nombre = $conn->real_escape_string($_POST["nombre"]);
 		$apellidos = $conn->real_escape_string($_POST["apellidos"]);
 		$email = $conn->real_escape_string($_POST["email"]);
@@ -42,19 +41,70 @@ function db_modificar_usuario(){
 	return "";
 }
 function db_modificar_concierto(){
+	
 	if (isset($_POST["fecha"], $_POST["hora"], $_POST["lugar"], $_POST["descripcion"]) && !isset($_POST["cancelar"])){
 		$conn = db_conectar();
 		
 		$old_fecha = $conn->real_escape_string($_POST["conciertos_mod2"]);
-		//print_r($old_fecha);
-		$fecha = $conn->real_escape_string($_POST["fecha"]);
-		$hora = $conn->real_escape_string($_POST["hora"]);
+		$fecha = DateTime::createFromFormat("d/m/Y H:i", ($_POST["fecha"] . " " . $_POST["hora"]))->getTimeStamp();
+		
+		$lugar = $conn->real_escape_string($_POST["lugar"]);
+
 		$descripcion = $conn->real_escape_string($_POST["descripcion"]);
 	
-		$result = $conn->query("UPDATE conciertos SET Fecha='$fecha', Hora='$hora', Descripcion='$descripcion' WHERE Fecha='$old_fecha'");
+		$result = $conn->query("UPDATE conciertos SET Fecha=$fecha, Descripcion='$descripcion', Lugar='$lugar' WHERE Fecha=$old_fecha");
 		db_log("El usuario {$_SESSION['email']} ha modificado un concierto");
 		$conn->close();
 		return $result;
+	}
+	return "";
+}
+function db_modificar_miembro(){
+	
+	if (isset($_POST["nombre"], $_POST["roll"], $_POST["fechanacimiento"], $_POST["fotografia"], $_POST["biografia"]) && !isset($_POST["cancelar"])){
+		$conn = db_conectar();
+		
+		$old_nombre = $conn->real_escape_string($_POST["miembro_mod2"]);
+		$nombre = $conn->real_escape_string($_POST["nombre"]);
+		$roll = $conn->real_escape_string($_POST["roll"]);
+		$fechanacimiento = $conn->real_escape_string($_POST["fechanacimiento"]);
+		$fotografia = $conn->real_escape_string($_POST["fotografia"]);
+		$biografia = $conn->real_escape_string($_POST["biografia"]);
+	
+		$result = $conn->query("UPDATE `miembros_grupo` SET Nombre='$nombre', Roll='$roll', Fechanacimiento='$fechanacimiento',Fotografia='$fotografia',Biografia='$biografia' WHERE Nombre='$old_nombre'");
+		db_log("El miembro {$_SESSION['email']} ha modificado un miembro");
+		$conn->close();
+		return $result;
+	}
+	return "";
+}
+function db_modificar_disco(){
+	// print_r($_POST["titulo"]);
+	// print_r($_POST["duracion"]);
+
+	if (isset($_POST["nombre"], $_POST["precio"], $_POST["fechapublicacion"],$_POST["imagen"], $_POST["descripcion"]) && !isset($_POST["cancelar"])){
+		$conn = db_conectar();
+		$old_nombre = $conn->real_escape_string($_POST["disco_mod2"]);
+		$nombre = $conn->real_escape_string($_POST["nombre"]);
+		$precio = $conn->real_escape_string($_POST["precio"]);
+		$fechapublicacion = $conn->real_escape_string($_POST["fechapublicacion"]);
+		$descripcion = $conn->real_escape_string($_POST["descripcion"]);
+		$result = $conn->query("UPDATE discos SET Nombre='$nombre', Precio='$precio', FechaPublicacion='$fechapublicacion', Descripcion='$descripcion' WHERE Nombre='$old_nombre'");
+		db_log("El usuario {$_SESSION['email']} ha modificado un concierto");
+		
+		$result = $conn->query("SELECT * FROM canciones WHERE Disco='$nombre'");
+		$totalcaciones=$result->num_rows;
+
+		for($i=1;$i<=$totalcaciones;$i++)
+		{
+			$titulo = $_POST["titulo$i"];
+			$duracion = $_POST["duracion$i"];
+			$row = $result->fetch_assoc();
+			$conn->query("UPDATE canciones SET Titulo='$titulo', Duracion='$duracion' WHERE Titulo='{$row["Titulo"]}'");
+		}
+		
+		$conn->close();
+		return true;
 	}
 	return "";
 }
@@ -102,25 +152,68 @@ function db_insertar_usuario(){
 	}
 	return "";
 }
-
+function db_insertar_disco(){
+	print_r($_POST);
+	if (isset($_POST["nombre"], $_POST["precio"], $_POST["fechapublicacion"], $_POST['imagen'],$_POST["descripcion"])
+		&& $_SESSION["tipo_user"] === "admin"){
+		
+		$conn = db_conectar();
+		$nombre = $conn->real_escape_string($_POST["nombre"]);
+		$precio = $conn->real_escape_string($_POST["precio"]);
+		$fechapublicacion = $conn->real_escape_string($_POST["fechapublicacion"]);
+		$imagen = $conn->real_escape_string($_POST["imagen"]);
+		$descripcion = $conn->real_escape_string($_POST["descripcion"]);
+		$result = $conn->query("INSERT INTO discos VALUES ('$nombre','$precio','$fechapublicacion','$imagen', '$descripcion')");
+		db_log("El usuario {$_SESSION['email']} ha insertado un nuevo concierto");
+		$i=1;
+		while(isset($_POST["titulo$i"]))
+		{
+			echo"HOLA$i";
+			$titulo=$conn->real_escape_string($_POST["titulo$i"]);
+			$duracion=$conn->real_escape_string($_POST["duracion$i"]);
+			$result = $conn->query("INSERT INTO canciones VALUES ('$titulo','$duracion','$nombre') ");
+			$i++;
+		}
+		$conn->close();
+		return $result;
+	}
+	return "";
+}
 function db_insertar_concierto(){
 	
 	if (isset($_POST["fecha"], $_POST["hora"], $_POST["lugar"], $_POST["descripcion"])
 		&& $_SESSION["tipo_user"] === "admin"){
 		
 		$conn = db_conectar();
-		$fecha = $conn->real_escape_string($_POST["fecha"]);
-		$hora = $conn->real_escape_string($_POST["hora"]);
+		$fecha = DateTime::createFromFormat("d/m/Y H:i", ($_POST["fecha"] . " " . $_POST["hora"]))->getTimeStamp();
 		$lugar = $conn->real_escape_string($_POST["lugar"]);
 		$descripcion = $conn->real_escape_string($_POST["descripcion"]);
-		$result = $conn->query("INSERT INTO conciertos VALUES ('$fecha', '$hora', '$lugar', '$descripcion')");
+		$result = $conn->query("INSERT INTO conciertos VALUES ('$fecha', '$lugar', '$descripcion')");
 		db_log("El usuario {$_SESSION['email']} ha insertado un nuevo concierto");
 		$conn->close();
 		return $result;
 	}
 	return "";
 }
+function db_insertar_miembro(){
+	print_r($_POST);
+	if (isset($_POST["nombre"], $_POST["roll"], $_POST["fechanacimiento"], $_POST["lugarnacimiento"], $_POST["fotografia"], $_POST["biografia"]) && $_SESSION["tipo_user"] === "admin"){
+		
+		$conn = db_conectar();
+		$nombre = $conn->real_escape_string($_POST["nombre"]);
+		$roll = $conn->real_escape_string($_POST["roll"]);
+		$fechanacimiento = $conn->real_escape_string($_POST["fechanacimiento"]);
+		$lugarnacimiento = $conn->real_escape_string($_POST["lugarnacimiento"]);
+		$fotografia = $conn->real_escape_string($_POST["fotografia"]);
+		$biografia = $conn->real_escape_string($_POST["biografia"]);
 
+		$result = $conn->query("INSERT INTO `miembros_grupo`  VALUES ('$nombre', '$roll', '$fechanacimiento', '$lugarnacimiento', '$fotografia', '$biografia')");
+		db_log("El usuario {$_SESSION['email']} ha insertado un nuevo miembro");
+		$conn->close();
+		return $result;
+	}
+	return "";
+}
 function db_insertar_biografia(){
 	
 	if (isset($_POST["id"], $_POST["texto"])

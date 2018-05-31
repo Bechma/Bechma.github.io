@@ -18,12 +18,12 @@ if ($disco_row !== FALSE && $disco_row->num_rows === 1){
 } else die();
 ?>
 
-<h2 class="titulosh2"> Discografia</h2>
+<h2 class="titulosh2" id="LIST"> Discografia</h2>
 
 <div class="estructura">
 	<!-- COLUMNA DE LA IZQUIERDA-->
 	<aside class="columIZQ2">
-		<h2><?php echo $disco_row["Nombre"] ?></h2>
+		<h2><?php echo $disco_row["Nombre"] ." ({$disco_row["FechaPublicacion"]})"?></h2>
 		<div class="img">
 			<img width="50%" src="<?php echo $disco_row["Imagen"] ?>" alt="No se ha podido cargar imagen" >
 		</div>
@@ -73,7 +73,7 @@ if ($disco_row !== FALSE && $disco_row->num_rows === 1){
 			$result = $conn->query("SELECT * FROM discos");
 			if ($result !== FALSE && $result->num_rows > 0){
 				while ( $row = $result->fetch_assoc() ){
-					echo "<li><a href='".htmlentities($_SERVER['PHP_SELF'])."?disco={$row['Nombre']}'>{$row['Nombre']}</a></li>";
+					echo "<a href='".htmlentities($_SERVER['PHP_SELF'])."?disco={$row['Nombre']}#LIST'><li>{$row['Nombre']}</li></a>";
 				}
 			}
 			?>
