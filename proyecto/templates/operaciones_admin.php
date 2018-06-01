@@ -135,9 +135,9 @@ function acciones(){
 				break;
 			//--------------------------------------------------------------DISCOGRAFIA----------------------------------------------------------------
 			case "discografia":
-			if (isset($_POST["borrar_discos"]))
+			if (isset($_POST["borrar_disco"]))
 			{
-				db_borrar_discos($_POST["borrar_disco"]);
+				db_borrar_disco($_POST["borrar_disco"]);
 				echo "<p class='correcto'>Disco borrado correctamente</p>";
 				listar_discos();
 			}
@@ -400,7 +400,7 @@ function listar_discos()
 	  		if (ajax.status === 200 && ajax.readyState === 4)
 	  			objButton.parentNode.parentNode.parentNode.removeChild(objButton.parentNode.parentNode);
 	  	};
-	  	ajax.send('accion={$_REQUEST["accion"]}&borrar_conciertos='+Id);
+	  	ajax.send('accion={$_REQUEST["accion"]}&borrar_disco='+Id);
 	  } 
 	}
 	</script>
@@ -875,23 +875,7 @@ HTML;
 		echo <<<HTML
 				<button onclick='nuevaCancion()'>Nueva Cancion</button>
 			<script>
-				var nuevaCancion = (function () {
-					id = 1;//al volver a llamar, no se inicializa a uno, es estatica
-					return function() {
-						var nuevoNodoTitulo = document.createElement("input");
-						nuevoNodoTitulo.type = "text";
-						nuevoNodoTitulo.name = "titulo" + id;
-						var nuevoNodoDuracion = document.createElement("input");
-						nuevoNodoDuracion.type = "text";
-						nuevoNodoDuracion.name = "duracion" + id;
-						var div = document.getElementById("inicioCancion");
-						div.appendChild(nuevoNodoTitulo);
-						div.appendChild(nuevoNodoDuracion);
-						div.appendChild(document.createElement("br"));
-
-						id++;
-					}
-				})();
+				
 			</script>
 			
 			<form method='post' action='$action_form_disco?accion=discografia#panel_control'>

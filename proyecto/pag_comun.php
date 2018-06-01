@@ -13,12 +13,12 @@ function HTMLinicio($titulo)
     <script src="javascript/menu.js"></script>
     <link rel="icon" sizes="16x16" href="Imagenes/icono.jpg">
 </head>
-<body>
+<body onload="lanzador()">
     <header>
-     <img src="Imagenes/img10.jpg" alt="No se ha podido cargar la imagen">     
+     <img src="" name="banner" alt="No se ha podido cargar la imagen">     
     </header>
     
-        <nav class="menuNav" id="myNav">
+        <nav  class="menuNav" id="myNav">
             <ul>
 HTML;
         $items = ["Inicio", "Biografia", "Discografia", "Conciertos", "Tienda", "Buscar", "Login"];

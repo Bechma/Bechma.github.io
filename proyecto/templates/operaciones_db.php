@@ -153,7 +153,7 @@ function db_insertar_usuario(){
 	return "";
 }
 function db_insertar_disco(){
-	print_r($_POST);
+	
 	if (isset($_POST["nombre"], $_POST["precio"], $_POST["fechapublicacion"], $_POST['imagen'],$_POST["descripcion"])
 		&& $_SESSION["tipo_user"] === "admin"){
 		
@@ -257,6 +257,45 @@ function db_borrar_conciertos($fecha){
 	return "";
 }
 
+function db_borrar_biografia($id){
+	if ($_SESSION["tipo_user"] === "admin"){
+		$conn = db_conectar();
+		$id = $conn->real_escape_string($id);
+
+		$result = $conn->query("DELETE FROM biografia WHERE id='$id'");
+		db_log("El usuario {$_SESSION['email']} ha borrado un párrafo de la biografía");
+		$conn->close();
+		return $result;
+	}
+	return "";
+}
+function db_borrar_miembro($nombre){
+	echo "AL LIODDD";
+	if ($_SESSION["tipo_user"] === "admin"){
+		$conn = db_conectar();
+		$nombre = $conn->real_escape_string($nombre);
+
+		$result = $conn->query("DELETE FROM `miembros_grupo` WHERE Nombre='$nombre'");
+		db_log("El usuario {$_SESSION['email']} ha borrado un miembro del grupo");
+		$conn->close();
+		return $result;
+	}
+	return "";
+}
+
+function db_borrar_disco($nombre){
+	if ($_SESSION["tipo_user"] === "admin"){
+		$conn = db_conectar();
+		$nombre = $conn->real_escape_string($nombre);
+		$result = $conn->query("DELETE FROM canciones WHERE Disco='$nombre'");
+		$result = $conn->query("DELETE FROM discos WHERE Nombre='$nombre'");
+		db_log("El usuario {$_SESSION['email']} ha borrado el disco y canciones de la discografia");
+		$conn->close();
+		return $result;
+	}
+	return "";
+}
+
 function db_gestionar_pedido(){
 	if (isset($_POST['id'], $_POST['EmailGestor'], $_POST['TextoEmail'], $_POST['Fecha'], $_POST['EstadoNuevo']) && !isset($_POST['cancelar'])){
 		$conn = db_conectar();
@@ -275,18 +314,7 @@ function db_gestionar_pedido(){
 	return "";
 }
 
-function db_borrar_biografia($id){
-	if ($_SESSION["tipo_user"] === "admin"){
-		$conn = db_conectar();
-		$id = $conn->real_escape_string($id);
 
-		$result = $conn->query("DELETE FROM biografia WHERE id='$id'");
-		db_log("El usuario {$_SESSION['email']} ha borrado un párrafo de la biografía");
-		$conn->close();
-		return $result;
-	}
-	return "";
-}
 
 function db_mod_precio(){
 	if(isset($_POST["Nombre"], $_POST["NuevoPrecio"]) && !isset($_POST['cancelar'])){

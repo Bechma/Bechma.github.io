@@ -1,8 +1,9 @@
 
 header img {
-    width: 99%;
+    width: 99.8%;
     display: block; /* Interpreto imagen como bloque y con margin auto se centra*/
     margin: auto;
+   height: 45%;
     
 }
  /*display: flex; Debo ponero para poder jugar con el aside y main*/
