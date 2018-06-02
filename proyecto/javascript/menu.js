@@ -17,7 +17,7 @@
 // });
 //<script src="http://code.jquery.com/jquery-latest.js"></script>
 //onload = function()
-function nav() {//ejecuta la funcion al terminar de cargar todo el html
+function nav() {//ejecuta la funcion al terminar de cargar el html
     window.onscroll = function() {myFunction()};
 
     var nav = document.getElementById("myNav");////guarda la altura  desde el inicio hasta el nav con la clase menu
@@ -36,7 +36,7 @@ function nav() {//ejecuta la funcion al terminar de cargar todo el html
 }
 
 var nuevaCancion = (function () {
-    id = 1;//al volver a llamar, no se inicializa a uno, es estatica
+    var id = 1;//al volver a llamar, no se inicializa a uno, es estatica
     return function() {
         var nuevoNodoTitulo = document.createElement("input");
         nuevoNodoTitulo.type = "text";
@@ -62,11 +62,10 @@ ads[3] = "Imagenes/img12.jpg";
 ads[4] = "Imagenes/img13.jpg";
 
 //variable para llevar la cuenta de las imagenes
-var longuitudArray = ads.length;
 var contador = 0;
 
 // Cojemos un numero aleatorio
-contador = Math.floor((Math.random() * longuitudArray))
+contador = Math.floor((Math.random() * ads.length));
 
 // Cambia la imagen cada segundo en este ejemplo
 var tiempo = 5;// En segundos
@@ -74,9 +73,9 @@ var timer = tiempo * 1000;
 
 function banner() {
 	contador++;
-	contador = contador % longuitudArray
-    document.banner.src = ads[contador];
-	setTimeout("banner()", timer);
+	contador = contador % ads.length;
+    document.getElementById("banner").src = ads[contador];
+	setTimeout(banner, timer);
 }
 
 function lanzador()//y si tengo de otros script etc etc como soluciono el lanzarlas todas a la vez
