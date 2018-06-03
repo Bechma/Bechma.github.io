@@ -17,11 +17,6 @@ while ($row = $result->fetch_assoc()){
 		$opciones .= "<option value='$valor'>$valor</option>\n";
 }
 
-//
-// https://www.sitepoint.com/working-with-dates-and-times/
-//
-
-
 
 echo "<div align='center'>
 <form action='".htmlspecialchars($_SERVER["PHP_SELF"])."' method='post'>
@@ -46,7 +41,7 @@ echo "<div align='center'>
 			$opciones
 		</select>
 		<br>
-		<label for='fecha_concierto'>Introduce 2 fechas para mostrar todos los conciertos entre dichas fechas</label>
+		<label for='fecha_concierto'>Introduce 2 fechas para mostrar todos los conciertos entre dichas fechas('dd/mm/aaaa' 'dd/mm/aaaa')</label>
 		<br>
 		<input id='fecha_concierto' name='fecha_concierto' value='".(isset($_POST["fecha_concierto"]) ? $_POST["fecha_concierto"] : "")."'>
 		<br>
@@ -56,38 +51,85 @@ echo "<div align='center'>
 </div>
 <br>";
 
-if (isset($_POST["buscar_concierto"])){
+
+// Imprimir los conciertos seleccionados y si se ha insertado para buscar entre 2 fechas sólo imprimirá los que correspondan
+if (isset($_POST["buscar_concierto"]) && gettype($_POST["buscar_concierto"]) === gettype([]) && count($_POST["buscar_concierto"]) > 0){
 	echo "<table border='2' align='center'>
 	<thead>
 		<tr>
 			<th>Fecha</th><th>Hora</th><th>Lugar</th><th>Descripcion</th>
 		</tr>
 	</thead>";
+	if (isset($_POST["fecha_concierto"]) && $_POST["fecha_concierto"] !== ""){
+		preg_match("!.*([0-2][0-9]/[01][0-9]/[0-9]{4}).*([0-2][0-9]/[01][0-9]/[0-9]{4}).*!", $_POST["fecha_concierto"], $dates);
+		if (count($dates) === 3){
+			$dates[1] = DateTime::createFromFormat('d/m/Y', $dates[1])->getTimestamp();
+			$dates[2] = DateTime::createFromFormat('d/m/Y', $dates[2])->getTimestamp();
+		}
+	}
+	else
+		$dates = [];
 	foreach ($_POST["buscar_concierto"] as $value){
-		$value = $timestamp = DateTime::createFromFormat('d/m/Y H:i', $value)->getTimestamp();
+		$value = DateTime::createFromFormat('d/m/Y H:i', $value)->getTimestamp();
 		$filtrado = $conn->real_escape_string($value);
 		$result = $conn->query("SELECT * FROM conciertos WHERE Fecha='$filtrado'");
-		if (isset($_POST["fecha_concierto"]) && $_POST["fecha_concierto"] !== "")
-			$dates = preg_match(".*([0-9]{4}).*[0-9]{4}", $_POST["fecha_concierto"]);
-		else
-			$dates = [];
+
 		while($row = $result->fetch_assoc()) {
+			if (!(count($dates) === 3 && $dates[1] <= $filtrado && $dates[2] >= $filtrado))
+				continue;
 			$fecha = date("d/m/Y", (int)$row["Fecha"]);
 			$hora = date("H:i", (int)$row["Fecha"]);
+			$lugar = htmlspecialchars($row["Lugar"]);
+			$descripcion = htmlspecialchars($row["Descripcion"]);
 			echo "
 		<tr>
 			<td>$fecha</td>
 			<td>$hora</td>
-			<td>{$row["Lugar"]}</td>
-			<td>{$row["Descripcion"]}</td>
+			<td>$lugar</td>
+			<td>$descripcion</td>
 		</tr>";
 		}
 	}
 
 	echo "</tbody>
 </table>";
+// Si no se ha seleccionado ninguna fecha, pero se han insertado 2 fechas, imprime los conciertos que haya entre esas dos fechas
+} elseif(isset($_POST["fecha_concierto"]) && $_POST["fecha_concierto"] !== ""){
+	preg_match("!.*([0-2][0-9]/[01][0-9]/[0-9]{4}).*([0-2][0-9]/[01][0-9]/[0-9]{4}).*!", $_POST["fecha_concierto"], $dates);
+	if (count($dates) === 3){
+		$dates[1] = DateTime::createFromFormat('d/m/Y', $dates[1])->getTimestamp();
+		$dates[2] = DateTime::createFromFormat('d/m/Y', $dates[2])->getTimestamp();
+		$result = $conn->query("SELECT * FROM conciertos");
+
+		echo "<table border='2' align='center'>
+	<thead>
+		<tr>
+			<th>Fecha</th><th>Hora</th><th>Lugar</th><th>Descripcion</th>
+		</tr>
+	</thead>";
+
+		while($row = $result->fetch_assoc()) {
+			if (!(count($dates) === 3 && $dates[1] <= $row["Fecha"] && $dates[2] >= $row["Fecha"]))
+				continue;
+			$fecha = date("d/m/Y", (int)$row["Fecha"]);
+			$hora = date("H:i", (int)$row["Fecha"]);
+			$lugar = htmlspecialchars($row["Lugar"]);
+			$descripcion = htmlspecialchars($row["Descripcion"]);
+			echo "
+		<tr>
+			<td>$fecha</td>
+			<td>$hora</td>
+			<td>$lugar</td>
+			<td>$descripcion</td>
+		</tr>";
+		}
+
+		echo "</tbody>
+</table>";
+	}
 }
 
+// Selecciona los discos publicados entre dos fechas dadas
 if (isset($_POST["fecha_disco"]) && $_POST["fecha_disco"] !== "") {
 	preg_match("!.*([0-9]{4}).*([0-9]{4}).*!", $_POST["fecha_disco"], $dates);
 	if(count($dates) === 3){
@@ -121,6 +163,7 @@ if (isset($_POST["fecha_disco"]) && $_POST["fecha_disco"] !== "") {
 		die();
 	}
 }
+// Si no se han insertado 2 fechas o de lo contrario se han insertado incorrectamente, busca si se ha insertado una cadena discos o canciones que contengan esa cadena
 if (isset($_POST["buscar_disco"]) && $_POST["buscar_disco"] !== ""){
 	$filtrado = $conn->real_escape_string($_POST["buscar_disco"]);
 	$result_canciones = $conn->query("SELECT * FROM canciones WHERE Titulo LIKE '%$filtrado%'");
