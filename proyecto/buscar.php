@@ -75,8 +75,9 @@ if (isset($_POST["buscar_concierto"]) && gettype($_POST["buscar_concierto"]) ===
 		$result = $conn->query("SELECT * FROM conciertos WHERE Fecha='$filtrado'");
 
 		while($row = $result->fetch_assoc()) {
-			if (!(count($dates) === 3 && $dates[1] <= $filtrado && $dates[2] >= $filtrado))
-				continue;
+			if (count($dates) === 3)
+				if (!($dates[1] <= $row["Fecha"] && $dates[2] >= $row["Fecha"]))
+					continue;
 			$fecha = date("d/m/Y", (int)$row["Fecha"]);
 			$hora = date("H:i", (int)$row["Fecha"]);
 			$lugar = htmlspecialchars($row["Lugar"]);
@@ -109,7 +110,7 @@ if (isset($_POST["buscar_concierto"]) && gettype($_POST["buscar_concierto"]) ===
 	</thead>";
 
 		while($row = $result->fetch_assoc()) {
-			if (!(count($dates) === 3 && $dates[1] <= $row["Fecha"] && $dates[2] >= $row["Fecha"]))
+			if (!($dates[1] <= $row["Fecha"] && $dates[2] >= $row["Fecha"]))
 				continue;
 			$fecha = date("d/m/Y", (int)$row["Fecha"]);
 			$hora = date("H:i", (int)$row["Fecha"]);
@@ -144,14 +145,19 @@ if (isset($_POST["fecha_disco"]) && $_POST["fecha_disco"] !== "") {
 	</thead>";
 
 		while($row = $result_disco->fetch_assoc()) {
-			if ($dates[1] <= $row["FechaPublicacion"] && $dates[2] >= $row["FechaPublicacion"] )
-			echo "
+			if ($dates[1] <= $row["FechaPublicacion"] && $dates[2] >= $row["FechaPublicacion"] ){
+				$nombre = htmlspecialchars($row["Nombre"]);
+				$precio = htmlspecialchars($row["Precio"]);
+				$fechapubli = htmlspecialchars($row["FechaPublicacion"]);
+				$descripcion = htmlspecialchars($row["Descripcion"]);
+				echo "
 		<tr>
-			<td>{$row["Nombre"]}</td>
-			<td>{$row["Precio"]}</td>
-			<td>{$row["FechaPublicacion"]}</td>
-			<td>{$row["Descripcion"]}</td>
+			<td>$nombre</td>
+			<td>$precio</td>
+			<td>$fechapubli</td>
+			<td>$descripcion</td>
 		</tr>";
+			}
 		}
 
 
@@ -179,12 +185,16 @@ if (isset($_POST["buscar_disco"]) && $_POST["buscar_disco"] !== ""){
 	</thead>";
 
 	while($row = $result_disco->fetch_assoc()) {
+		$nombre = htmlspecialchars($row["Nombre"]);
+		$precio = htmlspecialchars($row["Precio"]);
+		$fechapubli = htmlspecialchars($row["FechaPublicacion"]);
+		$descripcion = htmlspecialchars($row["Descripcion"]);
 		echo "
 		<tr>
-			<td>{$row["Nombre"]}</td>
-			<td>{$row["Precio"]}</td>
-			<td>{$row["FechaPublicacion"]}</td>
-			<td>{$row["Descripcion"]}</td>
+			<td>$nombre</td>
+			<td>$precio</td>
+			<td>$fechapubli</td>
+			<td>$descripcion</td>
 		</tr>";
 	}
 
@@ -202,11 +212,14 @@ if (isset($_POST["buscar_disco"]) && $_POST["buscar_disco"] !== ""){
 	</thead>";
 
 	while($row = $result_canciones->fetch_assoc()) {
+		$titulo = htmlspecialchars($row["Titulo"]);
+		$duracion = htmlspecialchars($row["Duracion"]);
+		$disco = htmlspecialchars($row["Disco"]);
 		echo "
 		<tr>
-			<td>{$row["Titulo"]}</td>
-			<td>{$row["Duracion"]}</td>
-			<td>{$row["Disco"]}</td>
+			<td>$titulo</td>
+			<td>$duracion</td>
+			<td>$disco</td>
 		</tr>";
 	}
 
