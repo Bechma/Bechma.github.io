@@ -3,7 +3,7 @@ require_once "pag_comun.php";
 HTMLinicio("Biografia");
 ?>
 
-<h2 class="titulosh2">Bibliografia</h2>
+<h2 class="titulosh2">Biografía</h2>
 <div class="img">
 	<img src="Imagenes/img2.jpg" alt="imagen no cargada">
 </div>

@@ -41,7 +41,7 @@ if ($miembro_row !== FALSE && $miembro_row->num_rows === 1){
 	<!-- COLUMNA DE LA DERECHA-->
 	</aside>
 	<aside class="columDRCH">
-		<h2>Mienbros del Grupo</h2>
+		<h2>Miembros del Grupo</h2>
 		
 		<ul>
 			<?php
@@ -55,7 +55,7 @@ if ($miembro_row !== FALSE && $miembro_row->num_rows === 1){
 		</ul>
 		
 		<article>
-			<h2> Origenes</h2>
+			<h2> Orígenes</h2>
 			
 			<div >
 			<?php

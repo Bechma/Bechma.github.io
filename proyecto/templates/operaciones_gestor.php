@@ -143,6 +143,7 @@ function listar_historico(){
 	$discospedidos = $conn->query("SELECT * FROM discospedidos") or die($conn->error);
 	$discos = $conn->query("SELECT * FROM discos") or die($conn->error);
 	$pedidos = $conn->query("SELECT * FROM pedidos") or die($conn->error);
+	$aux = $conn->query("SELECT * FROM pedidos") or die($conn->error);
 
 	$precio_disco = [];
 
@@ -155,7 +156,6 @@ function listar_historico(){
 	<thead>
 		<tr>
 			<th>Id</th>
-			<th>Disco</th>
 			<th>Precio</th>
 			<th>Estado</th>
 			<th>Texto Email</th>
@@ -167,45 +167,64 @@ function listar_historico(){
 HTML;
 $coste_pedido = [];
 while ($row = $discospedidos->fetch_assoc()){ //fetch_array?
-	if (isset($coste_pedido[$row["idpedido"]])){
-		$coste_pedido[$row["idpedido"]] += $row["Cantidad"] * $precio_disco[$row["Nombrediscos"]];
+	
+	if (isset($coste_pedido[$row["idpedidos"]])){
+		$coste_pedido[$row["idpedidos"]] += $row["Cantidad"] * $precio_disco[$row["Nombrediscos"]];
 	} else {
-		$coste_pedido[$row["idpedido"]] = $row["Cantidad"] * $precio_disco[$row["Nombrediscos"]];
+		$coste_pedido[$row["idpedidos"]] = $row["Cantidad"] * $precio_disco[$row["Nombrediscos"]];
 	}
 }
-	
+
 while($row = $pedidos->fetch_assoc()){
 
 	if($row["Estado"]== "Aceptado"){
 	echo"
 	<tr>
 	<td>".htmlentities($row["id"])."</td>
-	<td>".htmlentities($coste_pedido[$row["id"]])."</td>
+	<td>".htmlentities($coste_pedido[$row["id"]]). "</td>
+	<td>".htmlentities($row["Estado"])."</td>
 	<td>".htmlentities($row["TextoEmail"])."</td>
 	<td>".htmlentities($row["EmailGestor"])."</td>
 	<td>".htmlentities($row["Fecha"])."</td>
-	<td>".htmlentities($row["Estado"])."</td>
 	</tr>";
 	}
 }
+echo "
+</tbody>
+</table><br>";
 
-while($row = $pedidos->fetch_assoc()){
+echo <<<HTML
+<table border='2' align='center'>
+<thead>
+	<tr>
+		<th>Id</th>
+		<th>Precio</th>
+		<th>Estado</th>
+		<th>Texto Email</th>
+		<th>Gestor</th>
+		<th>Fecha</th>
+	</tr>
+</thead>
+<tbody>
+HTML;
+while($row = $aux->fetch_assoc()){
 
 	if($row["Estado"]== "Denegado"){
 	echo"
 	<tr>
 	<td>".htmlentities($row["id"])."</td>
-	<td>".htmlentities($coste_pedido[$row["id"]])."</td>
+	<td>".htmlentities($coste_pedido[$row["id"]]). "</td>
+	<td>".htmlentities($row["Estado"])."</td>
 	<td>".htmlentities($row["TextoEmail"])."</td>
 	<td>".htmlentities($row["EmailGestor"])."</td>
 	<td>".htmlentities($row["Fecha"])."</td>
-	<td>".htmlentities($row["Estado"])."</td>
 	</tr>";
 	}
 }
 echo "
 </tbody>
 </table>";
+
 	$conn->close();
 
 }

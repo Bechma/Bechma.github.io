@@ -319,7 +319,6 @@ div > .boton-carro{
     border: 2px solid #555555;
     border-radius: 8px;
     color: white;
-    padding-bottom: 12px;
     font-size: 16px;
     cursor: pointer;
     -webkit-transition-duration: 0.4s;

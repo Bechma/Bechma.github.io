@@ -27,7 +27,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
 	echo "<table border='2' align='center'>
 	<tr>
-		<th>Fecha</th><th>Hora</th><th>Lugar</th><th>Descripcion</th>
+		<th>Fecha</th><th>Hora</th><th>Lugar</th><th>Descripción</th>
 	</tr>
 	";
 	while($row = $result->fetch_assoc()) {

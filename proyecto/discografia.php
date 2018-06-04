@@ -18,7 +18,7 @@ if ($disco_row !== FALSE && $disco_row->num_rows === 1){
 } else die();
 ?>
 
-<h2 class="titulosh2" id="LIST"> Discografia</h2>
+<h2 class="titulosh2" id="LIST"> Discografía</h2>
 
 <div class="estructura">
 	<!-- COLUMNA DE LA IZQUIERDA-->
@@ -34,8 +34,8 @@ if ($disco_row !== FALSE && $disco_row->num_rows === 1){
 			</tr>
 			<tr align="center" class="titulo">
 				<th>Nº</th>
-				<th>Titulo</th>
-				<th>Duracion</th>
+				<th>Título</th>
+				<th>Duración</th>
 			</tr>
 			</thead>
 			<tbody align="center">
@@ -67,7 +67,7 @@ if ($disco_row !== FALSE && $disco_row->num_rows === 1){
 	</div>
 	<!-- COLUMNA DE LA DERECHA-->
 	<aside class="columDRCH2"> <!-- Incorporar en cada parrafo una mini imagen de cada albun-->
-		<h3>AC/DC ALBUNS</h3>
+		<h3>AC/DC ALBUMS</h3>
 		<ul>
 			<?php
 			$result = $conn->query("SELECT * FROM discos");

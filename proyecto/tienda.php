@@ -36,7 +36,7 @@ HTML;
 					$array[$row["Nombre"]] = $_POST[$nombre];
 				}
 				setcookie("tienda", json_encode($array), time()+3600);
-				$cambio=true;
+					$cambio=true;
 			}
 			echo <<<HTML
 		
@@ -60,6 +60,7 @@ HTML;
 	}
 	if($cambio == true){
 		echo"<p class='correcto'>Carrito actualizado</p>";
+		print_r($array);
 	}
 	
 	echo " </ul>";
