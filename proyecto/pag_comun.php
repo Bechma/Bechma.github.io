@@ -15,7 +15,7 @@ function HTMLinicio($titulo)
 </head>
 <body onload="lanzador()">
     <header>
-     <img src="" name="banner" alt="No se ha podido cargar la imagen">     
+     <img src="" id="banner" name="banner" alt="No se ha podido cargar la imagen">     
     </header>
     
         <nav  class="menuNav" id="myNav">

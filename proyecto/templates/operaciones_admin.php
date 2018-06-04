@@ -29,7 +29,7 @@ function acciones(){
 			case "miembros":
 			if (isset($_POST["borrar_miembro"])){
 				db_borrar_miembro($_POST["borrar_miembro"]);
-				listar_miembro();
+				listar_miembros();
 			}
 			elseif (isset($_REQUEST["miembro_add"])){  //$_REQUEST CONTIEN EL $_POST $_GET , $_COOKIEy las variables que se pasen por href
 				insertar_miembro();
@@ -39,7 +39,7 @@ function acciones(){
 				
 				if ($result === TRUE){
 					echo "<p class='correcto'>Miembro insertado correctamente</p>";
-					listar_miembro();
+					listar_miembros();
 				}
 				elseif ($result === "nombre"){
 					echo "<p class='error'>id_Miembro no valido</p>";
@@ -795,7 +795,7 @@ function form_usuario($location, $extra="true"){
 				<input type='hidden' name='accion' value='usuarios'>
 				<input type='hidden' name='$location' value='$extra'>
 				<input type='submit' value='Enviar'>
-				<input type='submit' name='cancelar' value='Cancelar' href='#cancelacion'>
+				<input type='submit' name='cancelar' value='Cancelar'>
 			</form>
 			</div>
 		</div>	
@@ -912,7 +912,7 @@ function form_miembro($location, $extra="true"){
 				value='" . (isset($_POST['fechanacimiento']) ? $_POST['fechanacimiento'] : '') . "' >
 				<br>
 				<label for='lugarnacimiento'>Lugar de Nacimiento: </label><br>
-				<textarea id='lugarnacimiento' cols='50'rows='1' name='lugarnacimiento'>".
+				<textarea id='lugarnacimiento' cols='50' rows='1' name='lugarnacimiento'>".
 				 (isset($_POST['lugarnacimiento']) ? $_POST['lugarnacimiento'] : '') ."</textarea>
 				<br>
 				<label for='fotografia'>Fotografia: </label>

@@ -1,14 +1,14 @@
 <?php
 function db_conectar(){
-	  $servername = "localhost";
-	  $username = "mianbr1718";
-	  $password = "mA29PIX8";
-	  $dbname = "mianbr1718";
+	$servername = "localhost";
+	$username = "mianbr1718";
+	$password = "mA29PIX8";
+	$dbname = "mianbr1718";
 
-	//$servername = "localhost";
-	//$username = "root";
-	//$password = "admin";
-	//$dbname = "mianbr1718";
+//	$servername = "localhost";
+//	$username = "root";
+//	$password = "admin";
+//	$dbname = "mianbr1718";
 
 
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -89,7 +89,8 @@ function db_modificar_disco(){
 		$precio = $conn->real_escape_string($_POST["precio"]);
 		$fechapublicacion = $conn->real_escape_string($_POST["fechapublicacion"]);
 		$descripcion = $conn->real_escape_string($_POST["descripcion"]);
-		$result = $conn->query("UPDATE discos SET Nombre='$nombre', Precio='$precio', FechaPublicacion='$fechapublicacion', Descripcion='$descripcion' WHERE Nombre='$old_nombre'");
+
+		$conn->query("UPDATE discos SET Nombre='$nombre', Precio='$precio', FechaPublicacion='$fechapublicacion', Descripcion='$descripcion' WHERE Nombre='$old_nombre'");
 		db_log("El usuario {$_SESSION['email']} ha modificado un concierto");
 		
 		$result = $conn->query("SELECT * FROM canciones WHERE Disco='$nombre'");
@@ -287,7 +288,8 @@ function db_borrar_disco($nombre){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$conn = db_conectar();
 		$nombre = $conn->real_escape_string($nombre);
-		$result = $conn->query("DELETE FROM canciones WHERE Disco='$nombre'");
+
+		$conn->query("DELETE FROM canciones WHERE Disco='$nombre'");
 		$result = $conn->query("DELETE FROM discos WHERE Nombre='$nombre'");
 		db_log("El usuario {$_SESSION['email']} ha borrado el disco y canciones de la discografia");
 		$conn->close();
