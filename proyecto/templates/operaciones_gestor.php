@@ -90,10 +90,10 @@ function acciones(){
 			break;
 			/******************************************************************/
 			default:
-				echo "<p>Elija una opcion</p>";
+				echo "<p class='h1login'>Elija una opcion</p>";
 				break;
 		}
-	} else echo "<p>Elija una opcion</p>";
+	} else echo "<p class='h1login'>Elija una opcion</p>";
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 function listar_peticiones(){
