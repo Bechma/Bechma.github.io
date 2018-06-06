@@ -314,9 +314,10 @@ aside .img{
 }
 /*Tienda*/
 
-div > .boton-carro{
-    background-color: rgb(185, 20, 20);
-    border: 2px solid #555555;
+.boton-carro{
+    background-color: rgba(230, 20, 20, 0.5) ;
+    width: 70%; 
+    border: 2px ridge #b8b6b6;
     border-radius: 8px;
     color: white;
     font-size: 16px;
@@ -325,7 +326,8 @@ div > .boton-carro{
     transition-duration: 0.4s;
 }
 .boton-carro:hover{
-    background-color: rgb(102, 0, 0);
+    background-color: rgba(180, 180, 180, 0.5) ;
+    
 }
 
 
@@ -370,7 +372,8 @@ div > .boton-carro{
 }
 
 .centrar-boton{
-    align-self: center;
+    text-align: center;
+    
 }
 
 .texto-precio{
