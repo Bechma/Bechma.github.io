@@ -6,52 +6,96 @@ HTMLinicio("Carrito");
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function formPedido(){
-    echo "
-	            <div align='center'>	
-		            <div class='login'>
-			            <form method='post' action='".htmlspecialchars($_SERVER["PHP_SELF"])."'>
-                            <fieldset>
-                                <legend>Datos del comprador</legend>
-                                <label>Nombre:</label>
-                                <input type='text' name='nombre' value='" . (isset($_POST['nombre']) ? $_POST['nombre'] : '') ."'>
-                                <br>
-                                <label>Apellidos:</label>
-                                <input type='text' name='apellidos' value='" . (isset($_POST['apellidos']) ? $_POST['apellidos'] : '') ."'>
-                                <br>
-                                <label>Telefono:</label>
-                                <input type='text' name='telefono' value='" . (isset($_POST['telefono']) ? $_POST['telefono'] : '') ."'>
-                                <br>
-                                <label>Email:</label>
-                                <input type='text' name='email' value='" . (isset($_POST['email']) ? $_POST['email'] : '') ."'>
-                                <br>
-                                <label>Dir. envio:</label>
-                                <input type='text' name='dir' value='" . (isset($_POST['dir']) ? $_POST['dir'] : '') ."'>
-                                <br>
-                            </fieldset>
-                                 <fieldset>
-                                 <legend>Método de pago</legend>
-                                 Modo de pago:<br>
-                                 <input type='radio' name='tipopago' value='Tarjeta'> Mastercard <br>
-                                 <input type='radio' name='tipopago' value='Reembolso'> Reembolso <br>
-                                 <fieldset>
-                                    <legend> Info tarjeta (solo rellenar si el metodo de pago es tarjeta) </legend>
 
-                                    <span>Numero Tarjeta:</span><input type='text' name='numtar' value='" . (isset($_POST['numtar']) ? $_POST['numtar'] : '') ."'>
-                                 <br>
-                                 <span>Mes de caducidad:</span><input type='text' name='mescadu' value='" . (isset($_POST['mescadu']) ? $_POST['mescadu'] : '') ."'>
-                                 <br>
-                                 <span>Año de caducidad:</span><input type='text' name='añocadu' value='" . (isset($_POST['añocadu']) ? $_POST['añocadu'] : '') ."'>
-                                 <br>
-                                  <span>Cdodigo de seguridad:</span><input type='text' name='cvc' value='" . (isset($_POST['cvc']) ? $_POST['cvc'] : '') ."'>
-                                 <br>
-                                </fieldset>
-                            </fieldset>
-                            <input type='submit' name='submit' value='Finalizar pedido'>
-                            <input type='hidden' name='enviar' value='enviar'>
-				        </form>
-			        </div>
-		        </div>	
-                ";
+	$resultado = "";
+	if (isset($_POST["nombre"]) && gettype($_POST["nombre"]) === "string" && strlen($_POST["nombre"]) > 0)
+		$resultado .= "<p>Nombre: ".htmlentities($_POST["nombre"])."</p>\n";
+	else{
+		$error = "nombre";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["apellidos"]) && gettype($_POST["apellidos"]) === "string" && strlen($_POST["apellidos"]) > 0)
+		$resultado .= "<p>Apellidos: ".htmlentities($_POST["apellidos"])."</p>\n";
+	else{
+		$error = "apellidos";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["postal"]) && gettype($_POST["postal"]) === "string" && strlen($_POST["postal"]) === 5
+		&& preg_match("!^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$!", $_POST["postal"]))
+		$resultado .= "<p>Direccion postal: ".htmlentities($_POST["postal"])."</p>\n";
+	else{
+		$error = "postal";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["telefono"]) && gettype($_POST["telefono"]) === "string"
+		&& preg_match("![56789][0-9]{8}!", $_POST["telefono"]))
+		$resultado .= "<p>Telefono: ".htmlentities($_POST["telefono"])."</p>\n";
+	else{
+		$error = "telefono";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["mail"]) && filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)){
+		$resultado .= "<p>Email: ".htmlentities($_POST["mail"])."</p>\n";
+	}
+	else{
+		$error = "mail";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["pago"]) && ($_POST["pago"] === "tarjeta" || $_POST["pago"] === "reembolso")){
+		$resultado .= "<p>Tipo de pago: ".htmlentities($_POST["pago"])."</p>\n";
+
+		if ($_POST["pago"] === "tarjeta"){
+			if (isset($_POST["numero_tarjeta"]) &&
+				(preg_match("/^5[1-5][0-9]{2}-?[0-9]{4}-?[0-9]{4}-?[0-9]{4}$/", $_POST["numero_tarjeta"])) || (preg_match("/^4[0-9]{3}-?[0-9]{4}-?[0-9]{4}-?[0-9]{4}$/", $_POST["numero_tarjeta"]))){
+				$resultado .= "<p>Numero tarjeta: ".htmlentities($_POST["tipo_tarjeta"])."</p>\n";
+			}
+			else{
+				$error = "numero_tarjeta";
+				require_once "templates/formulario_compra.php";
+				die();
+			}
+
+			if (isset($_POST["tarjeta_mes"]) && isset($_POST["tarjeta_anio"])
+				&& $_POST["tarjeta_mes"] >= 1 && $_POST["tarjeta_mes"] <= 12
+				&& $_POST["tarjeta_anio"] >= 2000 && $_POST["tarjeta_anio"] <= 2050){
+				$resultado .= "<p>Tarjeta caduca el: {$_POST["tarjeta_mes"]}/{$_POST["tarjeta_anio"]}</p>\n";
+			}
+			else{
+				$error = "tarjeta_caduca";
+				require_once "templates/formulario_compra.php";
+				die();
+			}
+
+			if (isset($_POST["tarjeta_cvc"]) && gettype($_POST["tarjeta_cvc"]) === "string"
+				&& strlen($_POST["tarjeta_cvc"]) === 3){
+				$resultado .= "<p>CVC tarjeta: {$_POST["tarjeta_cvc"]}</p>\n";
+			}
+			else{
+				$error = "tarjeta_cvc";
+				require_once "templates/formulario_compra.php";
+				die();
+			}
+		}
+	}
+	else{
+		$error = "pago";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	echo $resultado;
+	db_nuevo_pedido(json_decode($_COOKIE["tienda"]), "{$_POST["nombre"]} {$_POST["apellidos"]}");
+	setcookie("tienda", "", 123);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

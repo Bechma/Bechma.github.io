@@ -9,7 +9,7 @@ if (!$esta_logueado){
 }
 
 require_once "pag_comun.php";
-HTMLinicio("Administracion");
+HTMLinicio("Login");
 
 if ($_SESSION["tipo_user"] === "admin"){
 	require_once "templates/operaciones_admin.php";

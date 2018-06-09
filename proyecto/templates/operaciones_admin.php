@@ -78,7 +78,7 @@ function acciones(){
 			}
 			else
 				listar_miembros();
-				break;
+			break;
 				
 			//-----------------------------------------------------------BIOGRAFIA-------------------------------------------------------------------
 			case "biografia":
@@ -132,7 +132,7 @@ function acciones(){
 			}
 			else
 				listar_biografia();
-				break;
+			break;
 			//--------------------------------------------------------------DISCOGRAFIA----------------------------------------------------------------
 			case "discografia":
 			if (isset($_POST["borrar_disco"]))
@@ -195,7 +195,7 @@ function acciones(){
 			}
 			else
 				listar_discos();
-				break;
+			break;
 
 			//-------------------------------------------------------------CONCIERTOS-----------------------------------------------------------------
 			case "conciertos":
@@ -266,7 +266,8 @@ function acciones(){
 
 			case "usuarios":
 				if (isset($_POST["borrar_user"])){
-					db_borrar_usuario($_POST["borrar_user"]);
+					if ($_POST["borrar_user"] !== $_SESSION["email"])
+						db_borrar_usuario($_POST["borrar_user"]);
 					listar_usuarios();
 				}
 				elseif (isset($_REQUEST["usuarios_add"])){

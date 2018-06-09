@@ -299,16 +299,15 @@ function db_borrar_disco($nombre){
 }
 
 function db_gestionar_pedido(){
-	if (isset($_POST['id'], $_POST['EmailGestor'], $_POST['TextoEmail'], $_POST['Fecha'], $_POST['EstadoNuevo']) && !isset($_POST['cancelar'])){
+	if (isset($_POST['id'], $_POST['EmailGestor'], $_POST['TextoEmail'], $_POST['EstadoNuevo']) && !isset($_POST['cancelar'])){
 		$conn = db_conectar();
 
 		$id = $conn->real_escape_string($_POST['id']);
 		$mail = $conn->real_escape_string($_POST['EmailGestor']);
 		$texto = $conn->real_escape_string($_POST['TextoEmail']);
-		$fecha = $conn->real_escape_string($_POST['Fecha']);
 		$estado = $conn->real_escape_string($_POST['EstadoNuevo']);
 
-		$result = $conn->query("UPDATE pedidos SET EmailGestor='$mail', TextoEmail = '$texto', Fecha='$fecha', Estado='$estado' WHERE id='$id'");
+		$result = $conn->query("UPDATE pedidos SET EmailGestor='$mail', TextoEmail = '$texto', Estado='$estado' WHERE id=$id");
 		db_log("El usuario {$_SESSION['email']} ha gestionado un pedido");
 		$conn->close();
 		return $result;
@@ -333,6 +332,30 @@ function db_mod_precio(){
 	}
 	return "";
 }
+
+function db_nuevo_pedido($discos_cantidad, $nombre){
+	$conn = db_conectar();
+	$discos = $conn->query("SELECT * from discos");
+
+	$fecha = date("d/m/Y H:i", time());
+	$conn->query("INSERT INTO pedidos(TextoEmail, Estado, Fecha) VALUES ('Gracias por su compra $nombre', 'En Espera', '$fecha')");
+	$id = $conn->query("SELECT LAST_INSERT_ID()");
+
+	if( $discos !== FALSE && $discos->num_rows > 0 && $id !== FALSE && $id->num_rows > 0){
+		$id = $id->fetch_assoc()["LAST_INSERT_ID()"];
+		foreach ($discos_cantidad as $value => $item){
+			try {
+				$value = urldecode($value);
+				$item = (int) $item;
+				$conn->query("INSERT INTO discospedidos(idpedidos, Nombrediscos, Cantidad) VALUE ($id, '$value', $item)");
+			} catch (Exception $exception){
+
+			}
+		}
+	}
+	db_log("Compra de discos realizada $fecha");
+}
+
 function db_log($text){
 	$conn = db_conectar();
 	$text = $conn->real_escape_string($text);

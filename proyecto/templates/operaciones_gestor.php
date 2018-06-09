@@ -32,7 +32,7 @@ function acciones(){
 			}elseif(isset($_REQUEST['pedidos_mod2'])){
 				
 				$result = db_gestionar_pedido();
-				
+
 				if($result === TRUE){
 					echo" <p class='correcto'> Pedido actualizado</p>";
 					listar_peticiones();
@@ -104,7 +104,6 @@ function listar_peticiones(){
 	<table border='2' align='center'>
 	<thead>
 		<tr>
-			<th>Id</th>
 			<th>Fecha</th>
 			<th>Email Gestor</th>
 			<th>Texto Email</th>
@@ -117,7 +116,6 @@ HTML;
 	while ($row = $result->fetch_assoc() ){
 		echo"
 		<tr>
-		<td>".htmlentities($row["id"])."</td>
 		<td>".htmlentities($row["Fecha"])."</td>
 		<td>".htmlentities($row["EmailGestor"])."</td>
 		<td>".htmlentities($row["TextoEmail"])."</td>
@@ -167,7 +165,6 @@ function listar_historico(){
 HTML;
 $coste_pedido = [];
 while ($row = $discospedidos->fetch_assoc()){ //fetch_array?
-	
 	if (isset($coste_pedido[$row["idpedidos"]])){
 		$coste_pedido[$row["idpedidos"]] += $row["Cantidad"] * $precio_disco[$row["Nombrediscos"]];
 	} else {
@@ -304,13 +301,13 @@ function form_pedido($location, $extra="true"){
 			<div class='login' align='center'>
 				<form method='post' action='".htmlspecialchars($_SERVER["PHP_SELF"])."'>
 
-				<label for='id'>Identificador: </label>
-				<input type='text' id='id' name='id'
+				
+				<input type='hidden' id='id' name='id'
 				value='" . (isset($_POST['id']) ? $_POST['id'] : '') . "' readonly>
 				<br>
 				<label for='EmailGestor'>Email del Gestor Asociado: </label>
 				<input type='text' id='EmailGestor' name='EmailGestor'
-				value='" . (isset($_POST['EmailGestor']) ? $_POST['EmailGestor'] : '') . "'readonly>
+				value='" . (isset($_POST['EmailGestor']) ? $_POST['EmailGestor'] : '') . "' readonly>
 				<br>
 				<label for='Fecha'>Fecha: </label>
 				<input type='text' id='Fecha' name='Fecha'
