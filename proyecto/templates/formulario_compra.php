@@ -1,8 +1,14 @@
 <?php
+	/**
+	 * Se comprueba que el fichero que dirige a esta pagina sea carrito.php
+	 */
 	$checking = explode("/", $_SERVER["PHP_SELF"]);
 	if (end($checking) !== "carrito.php"){
 		die();
 	}
+	/**
+	 * Dependiendo del error que haya se mostrara un mensaje de error o otro
+	 */
 	switch ($error){
 		case "nombre": echo "<p class='error'>Rellena el nombre</p>"; break;
 		case "apellidos": echo "<p class='error'>Rellena la casilla con tus apellidos</p>"; break;
@@ -16,6 +22,8 @@
 		default: echo "";
 	}
 ?>
+
+<!-- Formulario de pedidos que debera de rellenar el usuario, este sera impreso mientras haya errores -->
 
 <form action="<?php echo htmlentities($_SERVER["PHP_SELF"]) ?>#myNav" method="post">
 	<fieldset>

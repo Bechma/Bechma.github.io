@@ -2,9 +2,15 @@
 require_once "pag_comun.php";
 require_once "templates/operaciones_db.php";
 HTMLinicio("Buscar");
-
+/**
+ * Conexion a la base de datos
+ */
 $conn = db_conectar();
-
+/**
+ * Aqui obtenemos todos los conciertos de la base de datos. Despues si el usuario ya ha introducido
+ * una fecha para la busqueda se compara esta fecha con cada una de las fechas de los conciertos
+ * si cumplen la condicion son almacenadas en el array que mostraremos mas adelante
+ */
 $result = $conn->query("SELECT * FROM conciertos");
 $opciones = "";
 while ($row = $result->fetch_assoc()){
@@ -17,7 +23,10 @@ while ($row = $result->fetch_assoc()){
 		$opciones .= "<option value='$valor'>$valor</option>\n";
 }
 
-
+/**
+ * Formularios para que el usuario introduzca los valores que sea buscar, tanto para buscar conciertos
+ * como para buscar conciertos
+ */
 echo "<div align='center'>
 <form action='".htmlspecialchars($_SERVER["PHP_SELF"])."' method='post'>
 	<fieldset>

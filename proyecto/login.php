@@ -47,6 +47,7 @@ require_once "pag_comun.php";
 HTMLinicio("Login");
 echo $error;
 ?>
+<!-- Este es el formulario para el login -->
 <div>
 	<form id="panel_control" method="POST" action="login.php">
 		<fieldset>

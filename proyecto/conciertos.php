@@ -6,6 +6,11 @@ require_once "templates/operaciones_db.php";
 HTMLinicio("Conciertos");
 
 echo '<h2 class="titulosh2"> Conciertos </h2>';
+/**
+ * Hacemos conexion a la base de datos para primeramente, 
+ * obtener el numero de conciertos que tenemos y adaptar el pageSize
+ */
+
 $conn = db_conectar();
 
 $sql = "select count(fecha) from conciertos";
@@ -22,6 +27,11 @@ if(isset($_GET['page'])){
 }
 $pos=$page*$pageSize;
 $pos=($pos>$nRows)?$nRows:$pos;
+/**
+ * Hacemos de nuevo conexion a la base de datos, esta vez para obtener
+ * todos los conciertos que haya en la base de datos y mostrarlos en su correspondiente tabla
+ * En caso de que no haya conciertos que mostrar, se indicara con un mensaje
+ */
 $sql = "SELECT * FROM conciertos order by fecha";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {

@@ -5,6 +5,13 @@ HTMLinicio("Carrito");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Funcion que muestra el formulario que se debe rellenar para completar un pedido.
+ * Comprobará los siguientes parámetros: Nombre, Apellidos, Dirección postal, Teléfono,
+ * Email, Tipo de pago, Valores de la tarjeta(en caso necesario). Si algun campo esta incorrecto
+ * mostrara mensaje de error y mantendra los valores ya introducidos.  Cuando todos los campos
+ * esten correctos, añadira un pedido a la base de datos
+ */
 function formPedido(){
 
 	$resultado = "";
@@ -101,6 +108,9 @@ function formPedido(){
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Nos conectamos a la base de datos y seleccionamos todos los discos que hay en ella
+ */
 $conn = db_conectar();
 $res = $conn->query("SELECT * FROM discos");
 $haydiscos = false;
@@ -111,9 +121,15 @@ echo "
 
 	
 </div>";
+/**
+ * Si la cookie de la tienda esta seteada, 
+ * la decodificamos para obtener los valores que hay en ella
+ */
 if(isset($_COOKIE["tienda"]))
     $array = json_decode(stripslashes($_COOKIE["tienda"]), true);
-
+/**
+ * Si los datos de la cookie coinciden con algun disco activamos la variable hay discos
+ */
 if( $res !== FALSE && $res->num_rows > 0){
 		
     while ($row = $res->fetch_assoc() ){
@@ -123,6 +139,10 @@ if( $res !== FALSE && $res->num_rows > 0){
         } 
     }
 }
+/**
+ * Si la variable hay discos esta activada mostramos todos los discos que el usuario
+ * selecciono en la tienda, asi como la cantidad de estos, y el precio total
+ */
  if($haydiscos){
     echo "  <div class='centrar'>
             <p class='correcto'> Estos son los productos que hay en su carro</p>";
@@ -157,7 +177,9 @@ if( $res !== FALSE && $res->num_rows > 0){
 
 
 
-
+			/**
+			 * Si el usuario decide tramitar el pedido le mostraremos el formulario de compra
+			 */
              if (isset($_REQUEST['tramitar'])){
 				
 				/*Aqui entra con el boton*/
@@ -169,7 +191,10 @@ if( $res !== FALSE && $res->num_rows > 0){
              
 
 
-
+/**
+ * Si el usuario no ha seleccionado discos en la tienda, le ofrecemos la opcion de ir a la tienda 
+ * con un enlace y ademas le mostramos un mensaje diciendole que no tiene discos en el carrito 
+ */
 }else{
     echo "  <div class='centrar'>
             <p class='error'>No hay discos en el carrito</p>

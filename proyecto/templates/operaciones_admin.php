@@ -3,6 +3,9 @@
 //print_r($_POST);
 require_once "operaciones_db.php";
 //----------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Esta funcion imprimira el menu de operaciones que un administrador puede ejecutar 
+ */
 function opciones_admin(){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$href = ["miembros", "biografia", "discografia", "conciertos", "usuarios", "log", "logout"];
@@ -21,19 +24,33 @@ function opciones_admin(){
 	}
 }
 //----------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Funcion que gestiona las acciones que puede realizar un usuario de tipo administrador: 
+ * -Editar miembros: Se gestiona la modificacion, agregacion y eliminacion de un elemento
+ * -Editar biografia: Se gestiona la modificacion, agregacion y eliminacion de un elemento
+ * -Editar discografia: Se gestiona la modificacion, agregacion y eliminacion de un elemento
+ * -Editar conciertos: Se gestiona la modificacion, agregacion y eliminacion de un elemento
+ * -Editar usuarios: Se gestiona la modificacion, agregacion y eliminacion de un elemento
+ * -Ver log del servidor
+ * -Desconectarse
+ */
 function acciones(){
 	
 	
 	if (isset($_REQUEST["accion"])){
 		switch ($_REQUEST["accion"]){
+			//La accion seleccionada es editar miembros
 			case "miembros":
+			//La operacion de editar miembros seleccionada es eliminat
 			if (isset($_POST["borrar_miembro"])){
 				db_borrar_miembro($_POST["borrar_miembro"]);
 				listar_miembros();
 			}
+			//La operacion de editar miembros seleccionada es añadir
 			elseif (isset($_REQUEST["miembro_add"])){  //$_REQUEST CONTIEN EL $_POST $_GET , $_COOKIEy las variables que se pasen por href
 				insertar_miembro();
 			}
+			//La operacion seleccionada es añadir y el formulario se ha enviado
 			elseif (isset($_POST["miembro_add2"]) && !isset($_POST["cancelar"])){
 				$result = db_insertar_miembro();
 				
@@ -50,9 +67,10 @@ function acciones(){
 					insertar_miembro();
 				}
 			}
+			//La operacion de editar miembros seleccionada es modificar
 			elseif (isset($_REQUEST["miembro_mod"]) && !isset($_POST["cancelar"])){
 				modificar_miembro(base64_decode($_REQUEST["miembro_mod"]));
-			}
+			}//La operacion de editar miembros seleccionada es modificar y el formulario se ha enviado
 			elseif (isset($_POST["miembro_mod2"])){
 				$result = db_modificar_miembro();
 				if ($result === TRUE){
@@ -81,14 +99,18 @@ function acciones(){
 			break;
 				
 			//-----------------------------------------------------------BIOGRAFIA-------------------------------------------------------------------
+			//La accion seleccionada es editar biografia
 			case "biografia":
+			//La operacion seleccionada es borrar parrafo
 			if (isset($_POST["borrar_parrafo"])){
 				db_borrar_biografia($_POST["borrar_parrafo"]);
 				listar_biografia();
 			}
+			//La operacion seleccionada es añadir un nuevo parrafo
 			elseif (isset($_REQUEST["parrafo_add"])){  //$_REQUEST CONTIEN EL $_POST $_GET , $_COOKIEy las variables que se pasen por href
 				insertar_biografia();
 			}
+			//La operacion seleccionada es añadir un nuevo parrafo y el formulario se ha enviado
 			elseif (isset($_POST["parrafo_add2"]) && !isset($_POST["cancelar"])){
 				$result = db_insertar_biografia();
 				if ($result === TRUE){
@@ -104,9 +126,11 @@ function acciones(){
 					insertar_biografia();
 				}
 			}
+			//La operacion seleccionada es modificar un parrafo
 			elseif (isset($_REQUEST["parrafo_mod"]) && !isset($_POST["cancelar"])){
 				modificar_biografia(base64_decode($_REQUEST["parrafo_mod"]));
 			}
+			//La operacion seleccionada es modificar un parrafo y el formulario se ha enviado
 			elseif (isset($_POST["parrafo_mod2"])){
 				$result = db_modificar_biografia();
 				if ($result === TRUE){
@@ -134,17 +158,21 @@ function acciones(){
 				listar_biografia();
 			break;
 			//--------------------------------------------------------------DISCOGRAFIA----------------------------------------------------------------
+			//La accion seleccionada es editar discografia
 			case "discografia":
+			//La operacion seleccionada es borrar disco
 			if (isset($_POST["borrar_disco"]))
 			{
 				db_borrar_disco($_POST["borrar_disco"]);
 				echo "<p class='correcto'>Disco borrado correctamente</p>";
 				listar_discos();
 			}
+			//La operacion seleccionada es añadir disco
 			elseif (isset($_REQUEST["disco_add"]))
 			{
 				insertar_disco();
 			}
+			//La operacion seleccionada es añadir disco y el formulario se ha enviado
 			elseif (isset($_POST["disco_add2"]) && !isset($_POST["cancelar"]))
 			{
 				
@@ -162,11 +190,13 @@ function acciones(){
 					insertar_disco();
 				}
 			}
+			//La operacion seleccionada es modificar disco
 			elseif (isset($_REQUEST["disco_mod"]))
 			{
 				//echo "VAMOS AL LIO";
 				modificar_disco(base64_decode($_REQUEST["disco_mod"]));
 			}
+			//La operacion seleccionada es modificar disco y el formulario se ha enviado
 			elseif (isset($_POST["disco_mod2"]))
 			{
 				//echo "VAMOS AL LIO22";
@@ -198,18 +228,21 @@ function acciones(){
 			break;
 
 			//-------------------------------------------------------------CONCIERTOS-----------------------------------------------------------------
+			//La accion seleccionada es editar conciertos
 			case "conciertos":
-
+			//La operacion seleccionada es borrar conciertos
 			if (isset($_POST["borrar_conciertos"]))
 			{
 				db_borrar_conciertos($_POST["borrar_conciertos"]);
 				echo "<p class='correcto'>Usuario borrado correctamente</p>";
 				listar_conciertos();
 			}
+			//La operacion seleccionada es añadir conciertos
 			elseif (isset($_REQUEST["conciertos_add"]))
 			{
 				insertar_concierto();
 			}
+			//La operacion seleccionada es añadir conciertos y se ha enviado el formulario
 			elseif (isset($_POST["conciertos_add2"]) && !isset($_POST["cancelar"]))
 			{
 				
@@ -227,11 +260,13 @@ function acciones(){
 					insertar_concierto();
 				}
 			}
+			//La operacion seleccionada es modificar 
 			elseif (isset($_REQUEST["conciertos_mod"]))
 			{
 				//echo "VAMOS AL LIO";
 				modificar_concierto(base64_decode($_REQUEST["conciertos_mod"]));
 			}
+			//La operacion seleccionada es modificar y se ha enviado el formulario
 			elseif (isset($_POST["conciertos_mod2"]))
 			{
 				//echo "VAMOS AL LIO22";
@@ -263,16 +298,19 @@ function acciones(){
 
 			break;
 			//------------------------------------------------------------USUARIOS------------------------------------------------------------------
-
+			//La accion seleccionada es editar usuarios
 			case "usuarios":
+			//La operacion seleccionada es borrar usuario
 				if (isset($_POST["borrar_user"])){
 					if ($_POST["borrar_user"] !== $_SESSION["email"])
 						db_borrar_usuario($_POST["borrar_user"]);
 					listar_usuarios();
 				}
+				//La operacion seleccionada es añadir usuario
 				elseif (isset($_REQUEST["usuarios_add"])){
 					insertar_usuario();
 				}
+				//La operacion seleccionada es añadir usuario y se ha enviado el formulario
 				elseif (isset($_POST["usuarios_add2"]) && !isset($_POST["cancelar"])){
 					$result = db_insertar_usuario();
 					if ($result === TRUE){
@@ -288,9 +326,11 @@ function acciones(){
 						insertar_usuario();
 					}
 				}
+				//La operacion seleccionada es modificar usuario
 				elseif (isset($_REQUEST["usuarios_mod"])){
 					modificar_usuario(base64_decode($_REQUEST["usuarios_mod"]));
 				}
+				//La operacion seleccionada es modificar usuario y se ha enviado el formulario
 				elseif (isset($_POST["usuarios_mod2"])){
 					$result = db_modificar_usuario();
 					if ($result === TRUE){
@@ -317,9 +357,11 @@ function acciones(){
 				else
 					listar_usuarios();
 				break;
+			//La accion seleccionada es ver el log
 			case "log":
 				listar_log();
 				break;
+			//Si todavia no se ha escogido nada
 			default:
 				echo "<p class='h1login'>Elija una opcion</p>";
 				break;
@@ -330,6 +372,10 @@ function acciones(){
 //------------------------------------------------------------------------------------LISTADOS----------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Funcion que lista los conciertos en una tabla, añadiendoles un boton de modificar y borrar en cada fila de la tabla
+ * ademas de un boton para añadir concierto al pie de la tabla
+ */
 function listar_conciertos()
 {
 	$conn = db_conectar();
@@ -385,6 +431,10 @@ HTML;
 	$conn->close();
 }
 //----------------------------------------------------------------------DISCOS------------------------------------------------------------------------------
+/**
+ * Funcion que lista los discos en una tabla, añadiendoles un boton de modificar y borrar en cada fila de la tabla
+ * ademas de un boton para añadir disco al pie de la tabla
+ */
 function listar_discos()
 {
 	$conn = db_conectar();
@@ -439,6 +489,10 @@ while ($row=mysqli_fetch_array($result)){
 	$conn->close();
 }
 //------------------------------------------------------------------------------------BIOGRAFIA----------------------------------------------------------------
+/**
+ * Funcion que lista los parrafos de biografia en una tabla, añadiendoles un boton de modificar y borrar en cada fila de la tabla
+ * ademas de un boton para añadir parrafo al pie de la tabla
+ */
 function listar_biografia()
 {
 	$conn = db_conectar();
@@ -487,7 +541,10 @@ while ($row=mysqli_fetch_array($result)){
 	$conn->close();
 }
 //-------------------------------------------------------------------USUARIOS---------------------------------------------------------------------------------
-
+/**
+ * Funcion que lista los usuarios en una tabla, añadiendoles un boton de modificar y borrar en cada fila de la tabla
+ * ademas de un boton para añadir usuario al pie de la tabla
+ */
 
 
 function listar_usuarios(){
@@ -547,6 +604,10 @@ function listar_usuarios(){
 	$conn->close();
 }
 //-------------------------------------------------------------------------MIEMBROS GRUPO---------------------------------------------------------------------------------
+/**
+ * Funcion que lista los miembros del grupo en una tabla, añadiendoles un boton de modificar y borrar en cada fila de la tabla
+ * ademas de un boton para añadir miembro al pie de la tabla
+ */
 function listar_miembros(){
 	$conn = db_conectar();
 	$result = $conn->query("SELECT * FROM `miembros_grupo`");
@@ -606,6 +667,10 @@ function listar_miembros(){
 
 //---------------------------------------------------------------------------------------MODIFICACIONES-------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Funcion que gestiona la modificacion de un mmiembro del grupo, carga los datos que se van a modificar
+ * y los muestra en el formulario para poderlos modificar
+ */
 function modificar_miembro($nombre){
 	$conn = db_conectar();
 	$nombre = $conn->real_escape_string($nombre);
@@ -625,7 +690,10 @@ function modificar_miembro($nombre){
 		echo "<p class='error'>ERROR</p>";
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+/**
+ * Funcion que gestiona la modificacion de un usuario, carga los datos que se van a modificar
+ * y los muestra en el formulario para poderlos modificar
+ */
 function modificar_usuario($email){
 	
 	$conn = db_conectar();
@@ -646,7 +714,10 @@ function modificar_usuario($email){
 		echo "<p class='error'>ERROR</p>";
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+/**
+ * Funcion que gestiona la modificacion de un disco, carga los datos que se van a modificar
+ * y los muestra en el formulario para poderlos modificar
+ */
 function modificar_disco($nombre){
 	$conn = db_conectar();
 	$nombre = $conn->real_escape_string($nombre);
@@ -682,7 +753,10 @@ function modificar_disco($nombre){
 		echo "<p class='error'>ERROR disco1</p>";
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+/**
+ * Funcion que gestiona la modificacion de un concierto, carga los datos que se van a modificar
+ * y los muestra en el formulario para poderlos modificar
+ */
 function modificar_concierto($fecha){
 	$conn = db_conectar();
 	$fecha = $conn->real_escape_string($fecha);
@@ -701,7 +775,10 @@ function modificar_concierto($fecha){
 		echo "<p class='error'>ERROR</p>";
 }
 //-------------------------------------------------------------------------------------------------------
-
+/**
+ * Funcion que gestiona la modificacion de un parrafo de biografia, carga los datos que se van a modificar
+ * y los muestra en el formulario para poderlos modificar
+ */
 function modificar_biografia($id){
 	$conn = db_conectar();
 	$id = $conn->real_escape_string($id);
@@ -719,39 +796,50 @@ function modificar_biografia($id){
 		echo "<p class='error'>ERROR</p>";
 }
 //-------------------------------------------------------------------------------------------------------
-
+/**
+ * Funcion que te permite seguir añadiendo miembros una vez ya has añadido uno
+ */
 function insertar_miembro(){
 	echo "<p id='inserccion' class='correcto'>Inserta un nuevo miembro:</p>";
 	form_miembro("miembro_add2");
 }
 //-------------------------------------------------------------------------------------------------------
-
+/**
+ * Funcion que te permite seguir añadiendo discos una vez ya has añadido uno
+ */
 function insertar_disco(){
 	echo "<p id='inserccion' class='correcto'>Inserta un nuevo disco:</p>";
 	form_disco("disco_add2");
 }
 //-------------------------------------------------------------------------------------------------------
-
+/**
+ * Funcion que te permite seguir añadiendo usuarios una vez ya has añadido uno
+ */
 function insertar_usuario(){
 	echo "<p id='inserccion' class='correcto'>Inserta un nuevo usuario:</p>";
 	form_usuario("usuarios_add2");
 }
 //-------------------------------------------------------------------------------------------------------
-
+/**
+ * Funcion que te permite seguir añadiendo conciertos una vez ya has añadido uno
+ */
 function insertar_concierto(){
 	echo "<p  id='inserccion' class='correcto'>Inserta un nuevo concierto:</p>";
 	form_concierto("conciertos_add2");
 }
 //-------------------------------------------------------------------------------------------------------
+/**
+ * Funcion que te permite seguir añadiendo parrafos de biografia una vez ya has añadido uno
+ */
 function insertar_biografia(){
 	echo "<p id='inserccion' class='correcto'>Inserta un nuevo Parrafo:</p>";
 	form_biografia("parrafo_add2");
 }
 //-------------------------------------------------------------------------------------------------------
 
-
-
-
+/**
+ * Funcion que imprime el formulario para la modificacion o insercion de un usuario
+ */
 function form_usuario($location, $extra="true"){
 	
 	$gestor=$administrador='';
@@ -803,6 +891,10 @@ function form_usuario($location, $extra="true"){
 ";
 }
 //-------------------------------------------------------------------------------------------------------
+
+/**
+ * Funcion que imprime el formulario para la modificacion o insercion de un disco
+ */
 function form_disco($location, $extra="true"){
 	
 	if(isset($_POST['nombre']))
@@ -891,6 +983,10 @@ HTML;
 //print_r($_REQUEST);
 }
 //-------------------------------------------------------------------------------------------------------
+
+/**
+ * Funcion que imprime el formulario para la modificacion o insercion de un miembro
+ */
 function form_miembro($location, $extra="true"){
 	
 		
@@ -942,6 +1038,10 @@ function form_miembro($location, $extra="true"){
 
 }
 //-------------------------------------------------------------------------------------------------------
+
+/**
+ * Funcion que imprime el formulario para la modificacion o insercion de un concierto
+ */
 function form_concierto($location, $extra="true"){
 	
 	
@@ -984,6 +1084,10 @@ function form_concierto($location, $extra="true"){
 
 }
 //-------------------------------------------------------------------------------------------------------
+
+/**
+ * Funcion que imprime el formulario para la modificacion o insercion de un parrafo de biografia
+ */
 function form_biografia($location, $extra="true"){
 	
 	echo "
@@ -1013,7 +1117,9 @@ function form_biografia($location, $extra="true"){
 ";
 }
 
-
+/**
+ * Funcion para listar el log del sistema y mostrarlo en modo de tabla
+ */
 function listar_log(){
 	$conn = db_conectar();
 	$result = $conn->query("SELECT * FROM log");

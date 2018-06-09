@@ -1,5 +1,11 @@
 <?php
 //------------------------------------------------------------------------------------------------------
+//  Esta página contendra información que es común a todas las paginas, como es el menu de navegacion
+//  o el footer
+//---------------------------------------------------------------------------------------------------
+/**
+ * Función que añade el inicio de HTML allí donde sea llamada
+ */
 function HTMLinicio($titulo)
 {
 	echo <<<HTML
@@ -32,6 +38,10 @@ HTML;
 }
 
 //------------------------------------------------------------------------------------------------------
+/**
+ * Funcion que añade el final de fichero HTML alli donde sea llamada, este incluye enlaces a paginas sociales del
+ * propio grupo
+ */
 function HTMLfin()
 {
     echo <<<HTML
