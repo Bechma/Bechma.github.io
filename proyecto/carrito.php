@@ -64,7 +64,7 @@ function formPedido(){
 		if ($_POST["pago"] === "tarjeta"){
 			if (isset($_POST["numero_tarjeta"]) &&
 				(preg_match("/^5[1-5][0-9]{2}-?[0-9]{4}-?[0-9]{4}-?[0-9]{4}$/", $_POST["numero_tarjeta"])) || (preg_match("/^4[0-9]{3}-?[0-9]{4}-?[0-9]{4}-?[0-9]{4}$/", $_POST["numero_tarjeta"]))){
-				$resultado .= "<p>Numero tarjeta: ".htmlentities($_POST["tipo_tarjeta"])."</p>\n";
+				$resultado .= "<p>Numero tarjeta: ".htmlentities($_POST["numero_tarjeta"])."</p>\n";
 			}
 			else{
 				$error = "numero_tarjeta";
