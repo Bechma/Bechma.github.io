@@ -36,16 +36,19 @@ HTML;
 			$nombre = urlencode($row["Nombre"]);
 			
 			if (isset($_POST[$nombre])){
-				
-				$array = json_decode(stripslashes($_COOKIE["tienda"]), true);
-			
-				if(isset($array[$row["Nombre"]])){
-					$array[$row["Nombre"]] += $_POST[$nombre];
-				} else {
-					$array[$row["Nombre"]] = $_POST[$nombre];
-				}
-				setcookie("tienda", json_encode($array), time()+3600);
-				$cambio=true;
+				try {
+					$array = json_decode(stripslashes($_COOKIE["tienda"]), true);
+					$numero = (int)$_POST[$nombre];
+					if ($numero > 0) {
+						if (isset($array[$row["Nombre"]])) {
+							$array[$row["Nombre"]] += $numero;
+						} else {
+							$array[$row["Nombre"]] = $numero;
+						}
+						setcookie("tienda", json_encode($array), time() + 3600);
+						$cambio = true;
+					}
+				} catch (Exception $exception){}
 			}
 			/**
 			 * Para cada disco que haya en la base de datos, se le asigna un espacio en un contenedor
