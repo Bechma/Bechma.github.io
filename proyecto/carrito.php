@@ -114,6 +114,7 @@ function formPedido(){
 $conn = db_conectar();
 $res = $conn->query("SELECT * FROM discos");
 $haydiscos = false;
+$carritovacio = false;
 echo "
 <h2 class='titulosh2'>Carrito de compras</h2>
 
@@ -125,6 +126,13 @@ echo "
  * Si la cookie de la tienda esta seteada, 
  * la decodificamos para obtener los valores que hay en ella
  */
+
+if (isset($_REQUEST['vaciar'])){
+	setcookie("tienda", "", time()-3600);
+	$haydiscos=false;
+	echo "<p class='error'>Carrito vaciado</p>";
+	$carritovacio = true;
+}
 if(isset($_COOKIE["tienda"]))
     $array = json_decode(stripslashes($_COOKIE["tienda"]), true);
 /**
@@ -143,7 +151,8 @@ if( $res !== FALSE && $res->num_rows > 0){
  * Si la variable hay discos esta activada mostramos todos los discos que el usuario
  * selecciono en la tienda, asi como la cantidad de estos, y el precio total
  */
- if($haydiscos){
+
+ if($haydiscos && !$carritovacio){
     echo "  <div class='centrar'>
             <p class='correcto'> Estos son los productos que hay en su carro</p>";
     echo "<table border='2' align='center'>
@@ -171,9 +180,10 @@ if( $res !== FALSE && $res->num_rows > 0){
             }
         }
         echo "</table>
-                <p class='centrar'> Total: $total € </p>
-                <a href=tienda.php class='boton-carro'>Ir a la tienda</a><a href='".htmlspecialchars($_SERVER["PHP_SELF"])."?tramitar=true' class='boton-carro'>Tramitar pedido</a>
-             </div>";
+				<p class='centrar'> Total: $total € </p>
+				<a href=tienda.php class='boton-carro'>Ir a la tienda</a><a href='".htmlspecialchars($_SERVER["PHP_SELF"])."?tramitar=true' class='boton-carro'>Tramitar pedido</a>
+				<br><a href='".htmlspecialchars($_SERVER["PHP_SELF"])."?vaciar=true' class='boton-carro'> Vaciar carrito</a>
+				</div>";
 
 
 
@@ -186,7 +196,8 @@ if( $res !== FALSE && $res->num_rows > 0){
                 
                 
                     formPedido();
-                }
+				}
+			
             
              
 
