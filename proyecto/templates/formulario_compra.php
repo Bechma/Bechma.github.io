@@ -24,7 +24,7 @@
 ?>
 
 <!-- Formulario de pedidos que debera de rellenar el usuario, este sera impreso mientras haya errores -->
-<div id="panel_control" align="center">
+<div  align="center">
 <div class="login">
 <form action="<?php echo htmlentities($_SERVER["PHP_SELF"]) ?>#myNav" method="post">
 	<fieldset>

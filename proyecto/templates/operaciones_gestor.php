@@ -329,7 +329,7 @@ function gestionar_disco($Nombre){
  */
 function form_pedido($location, $extra="true"){
 	echo "
-		<div >
+		<div align='center'>
 			<div class='login' align='center'>
 				<form method='post' action='".htmlspecialchars($_SERVER["PHP_SELF"])."'>
 
