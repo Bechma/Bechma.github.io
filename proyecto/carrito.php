@@ -168,14 +168,22 @@ if( $res !== FALSE && $res->num_rows > 0){
                 
                 $nombre = urlencode($row["Nombre"]);
                 if(isset($array[$row["Nombre"]])){
-                    
-                    echo "<tr>";
-                    echo "<td>".$row["Nombre"]." </td>";        
-                    echo "<td>".$row["Precio"]." € </td>";
-                    echo "<td>".$array[$row["Nombre"]]." </td>";
-                    $sub = $array[$row["Nombre"]] * $row["Precio"];
-                    echo "<td>$sub €</td>";  
-                    $total += $sub;  
+                    try {
+						$cantidad = (int) $array[$row["Nombre"]];
+						if($cantidad > 0){
+						echo "<tr>";
+                    	echo "<td>".$row["Nombre"]." </td>";        
+                    	echo "<td>".$row["Precio"]." € </td>";
+                    	echo "<td>".$array[$row["Nombre"]]." </td>";
+                    	$sub = $cantidad * $row["Precio"];
+                   		echo "<td>$sub €</td>";  
+                   		$total += $sub;
+						
+						}
+					} catch (Exception $exception){
+		
+					}
+                      
                 } 
             }
         }
