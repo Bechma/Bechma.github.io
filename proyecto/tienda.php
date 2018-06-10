@@ -45,6 +45,7 @@ HTML;
 					$array[$row["Nombre"]] = $_POST[$nombre];
 				}
 				setcookie("tienda", json_encode($array), time()+3600);
+				if((int) $_POST[$nombre] > 0)
 				$cambio=true;
 			}
 			/**
