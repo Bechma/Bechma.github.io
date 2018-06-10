@@ -24,7 +24,8 @@
 ?>
 
 <!-- Formulario de pedidos que debera de rellenar el usuario, este sera impreso mientras haya errores -->
-
+<div id="panel_control" align="center">
+<div class="login">
 <form action="<?php echo htmlentities($_SERVER["PHP_SELF"]) ?>#myNav" method="post">
 	<fieldset>
 		<legend>Informacion personal</legend>
@@ -81,3 +82,5 @@
 	<input type="reset" value="Reiniciar">
 	<input type="submit" name="formulario2" value="Enviar">
 </form>
+</div>
+</div>
