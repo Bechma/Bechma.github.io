@@ -369,12 +369,15 @@ function acciones(){
 			break;
 
 			case "borrarBD":
-				echo "<p class='correcto'> BD borrada correctamente </p>";
-				borrarBD();
+				if(isset($_REQUEST["confirmacion"])){
+					echo "<p class='correcto'> BD borrada correctamente </p>";
+					borrarBD();
+				}else
+				form_borrarBD();
 			break;
 
 			case "restore":
-				echo "<p class='correcto'> Restore correcto</p>";
+				
 				restore();
 			break;
 			
@@ -815,7 +818,7 @@ function backup(){
 
 // Obtener listado de tablas
 $db = db_conectar();
-$f = "/home/alumnos/1718/antoniojj1718/public_html/Proyecto/prueba.sql";
+$f = "/home/alumnos/1718/mianbr1718/public_html/Proyecto/backup.sql";
 $tablas = array();
 $result = mysqli_query($db, 'SHOW TABLES');
 
@@ -862,46 +865,65 @@ foreach($tablas as $tab)
 }
 
 function restore(){
+	
 	$db = db_conectar();
-	$f = "/home/alumnos/1718/antoniojj1718/public_html/Proyecto/prueba.sql";
-	mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=0');
-$result = mysqli_query($db, 'SHOW TABLES');
+	$f = "/home/alumnos/1718/mianbr1718/public_html/Proyecto/backup.sql";
+	if(file_exists($f)){
+		mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=0');
+		$result = mysqli_query($db, 'SHOW TABLES');
 
-while ($row = mysqli_fetch_row($result)) mysqli_query($db, 'DELETE * FROM ' . $row[0]);
-$error = '';
-$sql = file_get_contents($f);
-$queries = explode(';', $sql);
+		while ($row = mysqli_fetch_row($result)) mysqli_query($db, 'DELETE * FROM ' . $row[0]);
+		$error = '';
+		$sql = file_get_contents($f);
+		$queries = explode(';', $sql);
 
-foreach($queries as $q)
-	{
-	if (!mysqli_query($db, $q)) $error.= mysqli_error($db);
+		foreach($queries as $q)
+		{
+			if (!mysqli_query($db, $q)) $error.= mysqli_error($db);
+		}
+
+		mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=1');
+		echo "<p class='correcto'> Restore correcto</p>";
+	}else{
+		echo "<p class='error'> No existe fichero de backup en el directorio 'Proyecto'</p>";
 	}
-
-mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=1');
-
 }
 
 function borrarBD(){
 	
-$db = db_conectar();
-$tablas = array();
-$result = mysqli_query($db, 'SHOW TABLES');
-$correo_actual = $_SESSION["email"];
-//print_r($tablas);
-while ($row = mysqli_fetch_row($result)) $tablas[] = $row[0];
-foreach($tablas as $tab)
-	{
-		
-		
-		if($tab != 'usuarios')
-		 mysqli_query($db, 'DROP TABLE ' . $tab . ';');
+	$db = db_conectar();
+	$tablas = array();
+	$result = $db->query("SHOW TABLES");
+	$correo_actual = $_SESSION["email"];
 	
+	while ($row = $result->fetch_assoc()) $tablas[] = $row["Tables_in_mianbr1718"];
+	
+	foreach($tablas as $tab)
+	{	
+		echo "$tab<br>";
+		if($tab != 'usuarios')
+			$db->query("DELETE FROM $tab");
 	}
-	$result = $db->query("DELETE * FROM usuarios WHERE Email <> '{$_SESSION["email"]}'");
-	print_r($result);
-	echo "$result";
-	mysqli_query($db, 'DROP TABLE discos;');
+	$result = $db->query("DELETE FROM usuarios WHERE Email <> '{$_SESSION["email"]}'");
 }
+/**
+ * Formulario para pedir confirmacion de borrar base de datos
+ */
+function form_borrarBD(){
+	echo "
+	<div align='center'>	
+		<div class='login'>
+			<p class='error'> Esta accion borrará todo el contenido de la base de datos</p>
+			<p class='error'>¿Seguro que desea continuar?</p>
+			<div class='centrar'>
+			<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=borrarBD&confirmacion='si'#modificar'>SI</a>
+			<a class='admin-botones' href='".htmlspecialchars($_SERVER["PHP_SELF"])."?accion=''>NO</a>
+			</div>
+		</div>
+	</div>
+			";
+}
+
 //-------------------------------------------------------------------------------------------------------
 /**
  * Funcion que te permite seguir añadiendo miembros una vez ya has añadido uno
