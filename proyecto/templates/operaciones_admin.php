@@ -12,7 +12,7 @@ function opciones_admin(){
 		$name = ["Editar miembros Grupo", "Editar biografía", "Editar discografía", "Editar conciertos", "Editar usuarios", "BackUp","Restore","Borrar BD","Ver log del servidor", "Desconectarse"];
 		echo '<div id="panel_control" align="center">';
 			echo '<div class="login">';
-				echo "<ul list-style-image: url('Imagenes/icono.jpg') >";
+				echo "<ul>";
 				foreach($href as $i => $val){
 					echo "<li><a href='dashboard.php?accion=$val#panel_control'>{$name[$i]}</a></li>";
 				}
@@ -900,7 +900,7 @@ function borrarBD(){
 	
 	foreach($tablas as $tab)
 	{	
-		echo "$tab<br>";
+		
 		if($tab != 'usuarios')
 			$db->query("DELETE FROM $tab");
 	}

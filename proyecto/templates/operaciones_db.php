@@ -9,10 +9,10 @@ function db_conectar(){
 	$password = "mA29PIX8";
 	$dbname = "mianbr1718";
 
-	// $servername = "localhost";
-	// $username = "root";
-	// $password = "admin";
-	// $dbname = "mianbr1718";
+	//  $servername = "localhost";
+	//  $username = "root";
+	//  $password = "admin";
+	//  $dbname = "mianbr1718";
 
 
 	$conn = new mysqli($servername, $username, $password, $dbname);

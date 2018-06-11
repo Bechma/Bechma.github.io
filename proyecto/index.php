@@ -15,11 +15,17 @@ if (!isset($_GET["miembro"])){
 	else
 	echo "<p class='error'>ERROR</p>";
 }
-$miembro = $conn->real_escape_string($_GET["miembro"]);
+
+if(isset($_GET["miembro"]))//en el caso de borrar BD no salga el error
+{
+	$miembro = $conn->real_escape_string($_GET["miembro"]);
+	$miembro_row = $conn->query("SELECT * FROM `miembros_grupo` WHERE Roll='$miembro'");
+}
+
 HTMLinicio("Inicio");
 
-$miembro_row = $conn->query("SELECT * FROM `miembros_grupo` WHERE Roll='$miembro'");
-if ($miembro_row !== FALSE && $miembro_row->num_rows === 1){
+
+if (isset($miembro) && $miembro_row !== FALSE && $miembro_row->num_rows === 1  ){
 	$miembro_row = $miembro_row->fetch_assoc();
 } else die();
 ?>

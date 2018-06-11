@@ -13,11 +13,16 @@ if (!isset($_GET["disco"])){
 		die();
 	}
 }
-$disco = $conn->real_escape_string($_GET["disco"]);
+if(isset($_GET["disco"]))//en el caso de borrar BD no salga el error
+{
+	$disco = $conn->real_escape_string($_GET["disco"]);
+	$disco_row = $conn->query("SELECT * FROM discos WHERE Nombre='$disco'");
+}
+
 HTMLinicio("Discografia");
 
-$disco_row = $conn->query("SELECT * FROM discos WHERE Nombre='$disco'");
-if ($disco_row !== FALSE && $disco_row->num_rows === 1){
+
+if (isset($disco) && $disco_row !== FALSE && $disco_row->num_rows === 1){
 	$disco_row = $disco_row->fetch_assoc();
 } else die();
 ?>
