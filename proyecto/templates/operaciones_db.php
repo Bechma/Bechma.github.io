@@ -1,9 +1,15 @@
 <?php
+/**
+ * Funcion que nos permite establecer una conexion con la base de datos
+ */
 function db_conectar(){
 	$servername = "localhost";
-	$username = "mianbr1718";
-	$password = "mA29PIX8";
-	$dbname = "mianbr1718";
+	$username = "antoniojj1718";
+	$password = "qA4762BN";
+	$dbname = "antoniojj1718";
+	//$username = "mianbr1718";
+	//$password = "mA29PIX8";
+	//$dbname = "mianbr1718";
 
 	// $servername = "localhost";
 	// $username = "root";
@@ -20,7 +26,10 @@ function db_conectar(){
 	return $conn;
 }
 
-
+/**
+ * Funcion que se encarga de actualizar los datos de un usuario de la tabla de usuarios de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_modificar_usuario(){
 	if (isset($_POST["tipo"], $_POST["nombre"], $_POST["apellidos"], $_POST["email"], $_POST["password"], $_POST["telefono"]) && !isset($_POST["cancelar"])){
 		$conn = db_conectar();
@@ -40,6 +49,11 @@ function db_modificar_usuario(){
 	}
 	return "";
 }
+
+/**
+ * Funcion que se encarga de actualizar los datos de un concierto de la tabla de conciertos de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_modificar_concierto(){
 	
 	if (isset($_POST["fecha"], $_POST["hora"], $_POST["lugar"], $_POST["descripcion"]) && !isset($_POST["cancelar"])){
@@ -59,6 +73,10 @@ function db_modificar_concierto(){
 	}
 	return "";
 }
+/**
+ * Funcion que se encarga de actualizar los datos de un miembro de la tabla de miembros de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_modificar_miembro(){
 	
 	if (isset($_POST["nombre"], $_POST["roll"], $_POST["fechanacimiento"], $_POST["fotografia"], $_POST["biografia"]) && !isset($_POST["cancelar"])){
@@ -78,6 +96,10 @@ function db_modificar_miembro(){
 	}
 	return "";
 }
+/**
+ * Funcion que se encarga de actualizar los datos de un concierto de la tabla de conciertos de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_modificar_disco(){
 	// print_r($_POST["titulo"]);
 	// print_r($_POST["duracion"]);
@@ -109,7 +131,10 @@ function db_modificar_disco(){
 	}
 	return "";
 }
-
+/**
+ * Funcion que se encarga de actualizar los datos biograficos de la tabla de biografia de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_modificar_biografia(){
 	if (isset($_POST["id"], $_POST["texto"])){
 		$conn = db_conectar();
@@ -128,7 +153,10 @@ function db_modificar_biografia(){
 	return "";
 }
 
-
+/**
+ * Funcion que se encarga de insertar una nueva fila en la tabla de usuarios de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_insertar_usuario(){
 	if (isset($_POST["nombre"], $_POST["apellidos"], $_POST["email"], $_POST["password"], $_POST["telefono"])
 		&& $_SESSION["tipo_user"] === "admin"){
@@ -153,6 +181,10 @@ function db_insertar_usuario(){
 	}
 	return "";
 }
+/**
+ * Funcion que se encarga de insertar una nueva fila en la tabla de discos de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_insertar_disco(){
 	
 	if (isset($_POST["nombre"], $_POST["precio"], $_POST["fechapublicacion"], $_POST['imagen'],$_POST["descripcion"])
@@ -180,6 +212,10 @@ function db_insertar_disco(){
 	}
 	return "";
 }
+/**
+ * Funcion que se encarga de insertar una nueva fila en la tabla de conciertos de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_insertar_concierto(){
 	
 	if (isset($_POST["fecha"], $_POST["hora"], $_POST["lugar"], $_POST["descripcion"])
@@ -196,6 +232,10 @@ function db_insertar_concierto(){
 	}
 	return "";
 }
+/**
+ * Funcion que se encarga de insertar una nueva fila en la tabla de miembros de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_insertar_miembro(){
 	print_r($_POST);
 	if (isset($_POST["nombre"], $_POST["roll"], $_POST["fechanacimiento"], $_POST["lugarnacimiento"], $_POST["fotografia"], $_POST["biografia"]) && $_SESSION["tipo_user"] === "admin"){
@@ -215,6 +255,10 @@ function db_insertar_miembro(){
 	}
 	return "";
 }
+/**
+ * Funcion que se encarga de insertar una nueva fila en la tabla de biografias de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_insertar_biografia(){
 	
 	if (isset($_POST["id"], $_POST["texto"])
@@ -232,6 +276,10 @@ function db_insertar_biografia(){
 	return "";
 }
 
+/**
+ * Funcion que se encarga de borrar una fila definida por su clave primaria de la tabla de usuarios de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_borrar_usuario($email){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$conn = db_conectar();
@@ -244,7 +292,10 @@ function db_borrar_usuario($email){
 	}
 	return "";
 }
-
+/**
+ * Funcion que se encarga de borrar una fila definida por su clave primaria de la tabla de conciertos de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_borrar_conciertos($fecha){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$conn = db_conectar();
@@ -257,7 +308,10 @@ function db_borrar_conciertos($fecha){
 	}
 	return "";
 }
-
+/**
+ * Funcion que se encarga de borrar una fila definida por su clave primaria de la tabla de biografias de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_borrar_biografia($id){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$conn = db_conectar();
@@ -270,6 +324,10 @@ function db_borrar_biografia($id){
 	}
 	return "";
 }
+/**
+ * Funcion que se encarga de borrar una fila definida por su clave primaria de la tabla de miembros de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_borrar_miembro($nombre){
 	echo "AL LIODDD";
 	if ($_SESSION["tipo_user"] === "admin"){
@@ -283,7 +341,10 @@ function db_borrar_miembro($nombre){
 	}
 	return "";
 }
-
+/**
+ * Funcion que se encarga de borrar una fila definida por su clave primaria de la tabla de discos de la base 
+ * de datos. Añade un registro al log al completar la operacion
+ */
 function db_borrar_disco($nombre){
 	if ($_SESSION["tipo_user"] === "admin"){
 		$conn = db_conectar();
@@ -297,18 +358,19 @@ function db_borrar_disco($nombre){
 	}
 	return "";
 }
-
+/**
+ * Funcion que se encarga de actualizar el estado de un pedido de la tabla pedidos de la base de datos. Añade un registro al log al completar la operacion
+ */
 function db_gestionar_pedido(){
-	if (isset($_POST['id'], $_POST['EmailGestor'], $_POST['TextoEmail'], $_POST['Fecha'], $_POST['EstadoNuevo']) && !isset($_POST['cancelar'])){
+	if (isset($_POST['id'], $_POST['EmailGestor'], $_POST['TextoEmail'], $_POST['EstadoNuevo']) && !isset($_POST['cancelar'])){
 		$conn = db_conectar();
 
 		$id = $conn->real_escape_string($_POST['id']);
 		$mail = $conn->real_escape_string($_POST['EmailGestor']);
 		$texto = $conn->real_escape_string($_POST['TextoEmail']);
-		$fecha = $conn->real_escape_string($_POST['Fecha']);
 		$estado = $conn->real_escape_string($_POST['EstadoNuevo']);
 
-		$result = $conn->query("UPDATE pedidos SET EmailGestor='$mail', TextoEmail = '$texto', Fecha='$fecha', Estado='$estado' WHERE id='$id'");
+		$result = $conn->query("UPDATE pedidos SET EmailGestor='$mail', TextoEmail = '$texto', Estado='$estado' WHERE id=$id");
 		db_log("El usuario {$_SESSION['email']} ha gestionado un pedido");
 		$conn->close();
 		return $result;
@@ -317,7 +379,9 @@ function db_gestionar_pedido(){
 }
 
 
-
+/**
+ * Funcion que se encarga de actualizar el estado de un disco de la tabla discos de la base de datos. Añade un registro al log al completar la operacion
+ */
 function db_mod_precio(){
 	if(isset($_POST["Nombre"], $_POST["NuevoPrecio"]) && !isset($_POST['cancelar'])){
 		$conn = db_conectar();
@@ -333,6 +397,35 @@ function db_mod_precio(){
 	}
 	return "";
 }
+/**
+ * Funcion que se encarga de insertar tanto pedidos como en discospedidos los datos de un nuevo pedido
+ * realizado al sistema. Añade un registro al log al completar la operacion
+ */
+function db_nuevo_pedido($discos_cantidad, $nombre){
+	$conn = db_conectar();
+	$discos = $conn->query("SELECT * from discos");
+
+	$fecha = date("d/m/Y H:i", time());
+	$conn->query("INSERT INTO pedidos(TextoEmail, Estado, Fecha) VALUES ('Gracias por su compra $nombre', 'En Espera', '$fecha')");
+	$id = $conn->query("SELECT LAST_INSERT_ID()");
+
+	if( $discos !== FALSE && $discos->num_rows > 0 && $id !== FALSE && $id->num_rows > 0){
+		$id = $id->fetch_assoc()["LAST_INSERT_ID()"];
+		foreach ($discos_cantidad as $value => $item){
+			try {
+				$value = urldecode($value);
+				$item = (int) $item;
+				$conn->query("INSERT INTO discospedidos(idpedidos, Nombrediscos, Cantidad) VALUE ($id, '$value', $item)");
+			} catch (Exception $exception){
+
+			}
+		}
+	}
+	db_log("Compra de discos realizada $fecha");
+}
+/**
+ * Funcion que se encarga de insertar un nuevo log en la tabla de logs
+ */
 function db_log($text){
 	$conn = db_conectar();
 	$text = $conn->real_escape_string($text);

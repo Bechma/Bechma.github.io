@@ -5,61 +5,116 @@ HTMLinicio("Carrito");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Funcion que muestra el formulario que se debe rellenar para completar un pedido.
+ * Comprobará los siguientes parámetros: Nombre, Apellidos, Dirección postal, Teléfono,
+ * Email, Tipo de pago, Valores de la tarjeta(en caso necesario). Si algun campo esta incorrecto
+ * mostrara mensaje de error y mantendra los valores ya introducidos.  Cuando todos los campos
+ * esten correctos, añadira un pedido a la base de datos
+ */
 function formPedido(){
-    echo "
-	            <div align='center'>	
-		            <div class='login'>
-			            <form method='post' action='".htmlspecialchars($_SERVER["PHP_SELF"])."'>
-                            <fieldset>
-                                <legend>Datos del comprador</legend>
-                                <label>Nombre:</label>
-                                <input type='text' name='nombre' value='" . (isset($_POST['nombre']) ? $_POST['nombre'] : '') ."'>
-                                <br>
-                                <label>Apellidos:</label>
-                                <input type='text' name='apellidos' value='" . (isset($_POST['apellidos']) ? $_POST['apellidos'] : '') ."'>
-                                <br>
-                                <label>Telefono:</label>
-                                <input type='text' name='telefono' value='" . (isset($_POST['telefono']) ? $_POST['telefono'] : '') ."'>
-                                <br>
-                                <label>Email:</label>
-                                <input type='text' name='email' value='" . (isset($_POST['email']) ? $_POST['email'] : '') ."'>
-                                <br>
-                                <label>Dir. envio:</label>
-                                <input type='text' name='dir' value='" . (isset($_POST['dir']) ? $_POST['dir'] : '') ."'>
-                                <br>
-                            </fieldset>
-                                 <fieldset>
-                                 <legend>Método de pago</legend>
-                                 Modo de pago:<br>
-                                 <input type='radio' name='tipopago' value='Tarjeta'> Mastercard <br>
-                                 <input type='radio' name='tipopago' value='Reembolso'> Reembolso <br>
-                                 <fieldset>
-                                    <legend> Info tarjeta (solo rellenar si el metodo de pago es tarjeta) </legend>
 
-                                    <span>Numero Tarjeta:</span><input type='text' name='numtar' value='" . (isset($_POST['numtar']) ? $_POST['numtar'] : '') ."'>
-                                 <br>
-                                 <span>Mes de caducidad:</span><input type='text' name='mescadu' value='" . (isset($_POST['mescadu']) ? $_POST['mescadu'] : '') ."'>
-                                 <br>
-                                 <span>Año de caducidad:</span><input type='text' name='añocadu' value='" . (isset($_POST['añocadu']) ? $_POST['añocadu'] : '') ."'>
-                                 <br>
-                                  <span>Cdodigo de seguridad:</span><input type='text' name='cvc' value='" . (isset($_POST['cvc']) ? $_POST['cvc'] : '') ."'>
-                                 <br>
-                                </fieldset>
-                            </fieldset>
-                            <input type='submit' name='submit' value='Finalizar pedido'>
-                            <input type='hidden' name='enviar' value='enviar'>
-				        </form>
-			        </div>
-		        </div>	
-                ";
+	$resultado = "";
+	if (isset($_POST["nombre"]) && gettype($_POST["nombre"]) === "string" && strlen($_POST["nombre"]) > 0)
+		$resultado .= "<p>Nombre: ".htmlentities($_POST["nombre"])."</p>\n";
+	else{
+		$error = "nombre";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["apellidos"]) && gettype($_POST["apellidos"]) === "string" && strlen($_POST["apellidos"]) > 0)
+		$resultado .= "<p>Apellidos: ".htmlentities($_POST["apellidos"])."</p>\n";
+	else{
+		$error = "apellidos";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["postal"]) && gettype($_POST["postal"]) === "string" && strlen($_POST["postal"]) === 5
+		&& preg_match("!^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$!", $_POST["postal"]))
+		$resultado .= "<p>Direccion postal: ".htmlentities($_POST["postal"])."</p>\n";
+	else{
+		$error = "postal";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["telefono"]) && gettype($_POST["telefono"]) === "string"
+		&& preg_match("![56789][0-9]{8}!", $_POST["telefono"]))
+		$resultado .= "<p>Telefono: ".htmlentities($_POST["telefono"])."</p>\n";
+	else{
+		$error = "telefono";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["mail"]) && filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)){
+		$resultado .= "<p>Email: ".htmlentities($_POST["mail"])."</p>\n";
+	}
+	else{
+		$error = "mail";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	if (isset($_POST["pago"]) && ($_POST["pago"] === "tarjeta" || $_POST["pago"] === "reembolso")){
+		$resultado .= "<p>Tipo de pago: ".htmlentities($_POST["pago"])."</p>\n";
+
+		if ($_POST["pago"] === "tarjeta"){
+			if (isset($_POST["numero_tarjeta"]) &&
+				(preg_match("/^5[1-5][0-9]{2}-?[0-9]{4}-?[0-9]{4}-?[0-9]{4}$/", $_POST["numero_tarjeta"])) || (preg_match("/^4[0-9]{3}-?[0-9]{4}-?[0-9]{4}-?[0-9]{4}$/", $_POST["numero_tarjeta"]))){
+				$resultado .= "<p>Numero tarjeta: ".htmlentities($_POST["numero_tarjeta"])."</p>\n";
+			}
+			else{
+				$error = "numero_tarjeta";
+				require_once "templates/formulario_compra.php";
+				die();
+			}
+
+			if (isset($_POST["tarjeta_mes"]) && isset($_POST["tarjeta_anio"])
+				&& $_POST["tarjeta_mes"] >= 1 && $_POST["tarjeta_mes"] <= 12
+				&& $_POST["tarjeta_anio"] >= 2000 && $_POST["tarjeta_anio"] <= 2050){
+				$resultado .= "<p>Tarjeta caduca el: {$_POST["tarjeta_mes"]}/{$_POST["tarjeta_anio"]}</p>\n";
+			}
+			else{
+				$error = "tarjeta_caduca";
+				require_once "templates/formulario_compra.php";
+				die();
+			}
+
+			if (isset($_POST["tarjeta_cvc"]) && gettype($_POST["tarjeta_cvc"]) === "string"
+				&& strlen($_POST["tarjeta_cvc"]) === 3){
+				$resultado .= "<p>CVC tarjeta: {$_POST["tarjeta_cvc"]}</p>\n";
+			}
+			else{
+				$error = "tarjeta_cvc";
+				require_once "templates/formulario_compra.php";
+				die();
+			}
+		}
+	}
+	else{
+		$error = "pago";
+		require_once "templates/formulario_compra.php";
+		die();
+	}
+
+	echo $resultado;
+	db_nuevo_pedido(json_decode($_COOKIE["tienda"]), "{$_POST["nombre"]} {$_POST["apellidos"]}");
+	setcookie("tienda", "", 123);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Nos conectamos a la base de datos y seleccionamos todos los discos que hay en ella
+ */
 $conn = db_conectar();
 $res = $conn->query("SELECT * FROM discos");
 $haydiscos = false;
+$carritovacio = false;
 echo "
 <h2 class='titulosh2'>Carrito de compras</h2>
 
@@ -67,9 +122,22 @@ echo "
 
 	
 </div>";
+/**
+ * Si la cookie de la tienda esta seteada, 
+ * la decodificamos para obtener los valores que hay en ella
+ */
+
+if (isset($_REQUEST['vaciar'])){
+	setcookie("tienda", "", time()-3600);
+	$haydiscos=false;
+	echo "<p class='error'>Carrito vaciado</p>";
+	$carritovacio = true;
+}
 if(isset($_COOKIE["tienda"]))
     $array = json_decode(stripslashes($_COOKIE["tienda"]), true);
-
+/**
+ * Si los datos de la cookie coinciden con algun disco activamos la variable hay discos
+ */
 if( $res !== FALSE && $res->num_rows > 0){
 		
     while ($row = $res->fetch_assoc() ){
@@ -79,7 +147,12 @@ if( $res !== FALSE && $res->num_rows > 0){
         } 
     }
 }
- if($haydiscos){
+/**
+ * Si la variable hay discos esta activada mostramos todos los discos que el usuario
+ * selecciono en la tienda, asi como la cantidad de estos, y el precio total
+ */
+
+ if($haydiscos && !$carritovacio){
     echo "  <div class='centrar'>
             <p class='correcto'> Estos son los productos que hay en su carro</p>";
     echo "<table border='2' align='center'>
@@ -95,37 +168,52 @@ if( $res !== FALSE && $res->num_rows > 0){
                 
                 $nombre = urlencode($row["Nombre"]);
                 if(isset($array[$row["Nombre"]])){
-                    
-                    echo "<tr>";
-                    echo "<td>".$row["Nombre"]." </td>";        
-                    echo "<td>".$row["Precio"]." € </td>";
-                    echo "<td>".$array[$row["Nombre"]]." </td>";
-                    $sub = $array[$row["Nombre"]] * $row["Precio"];
-                    echo "<td>$sub €</td>";  
-                    $total += $sub;  
+                    try {
+						$cantidad = (int) $array[$row["Nombre"]];
+						if($cantidad > 0){
+						echo "<tr>";
+                    	echo "<td>".$row["Nombre"]." </td>";        
+                    	echo "<td>".$row["Precio"]." € </td>";
+                    	echo "<td>".$array[$row["Nombre"]]." </td>";
+                    	$sub = $cantidad * $row["Precio"];
+                   		echo "<td>$sub €</td>";  
+                   		$total += $sub;
+						
+						}
+					} catch (Exception $exception){
+		
+					}
+                      
                 } 
             }
         }
         echo "</table>
-                <p class='centrar'> Total: $total € </p>
-                <a href=tienda.php class='boton-carro'>Ir a la tienda</a><a href='".htmlspecialchars($_SERVER["PHP_SELF"])."?tramitar=true' class='boton-carro'>Tramitar pedido</a>
-             </div>";
+				<p class='centrar'> Total: $total € </p>
+				<a href=tienda.php class='boton-carro'>Ir a la tienda</a><a href='".htmlspecialchars($_SERVER["PHP_SELF"])."?tramitar=true' class='boton-carro'>Tramitar pedido</a>
+				<br><a href='".htmlspecialchars($_SERVER["PHP_SELF"])."?vaciar=true' class='boton-carro'> Vaciar carrito</a>
+				</div>";
 
 
 
-
+			/**
+			 * Si el usuario decide tramitar el pedido le mostraremos el formulario de compra
+			 */
              if (isset($_REQUEST['tramitar'])){
 				
 				/*Aqui entra con el boton*/
                 
                 
                     formPedido();
-                }
+				}
+			
             
              
 
 
-
+/**
+ * Si el usuario no ha seleccionado discos en la tienda, le ofrecemos la opcion de ir a la tienda 
+ * con un enlace y ademas le mostramos un mensaje diciendole que no tiene discos en el carrito 
+ */
 }else{
     echo "  <div class='centrar'>
             <p class='error'>No hay discos en el carrito</p>

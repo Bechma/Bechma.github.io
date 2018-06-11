@@ -1,6 +1,10 @@
 <?php
 require_once "templates/operaciones_db.php";
 require_once "pag_comun.php";
+/**
+ * Hacemos conexion a la base de datos para obtener los pertinentes datos de los componentes del grupo
+ * que vamos a mostrar
+ */
 $conn = db_conectar();
 if (!isset($_GET["miembro"])){
 	$result = $conn->query("SELECT * FROM `miembros_grupo` LIMIT 0,1");//Limit: coge todas las primera columna de la tabla osea NOMBRE
@@ -9,7 +13,7 @@ if (!isset($_GET["miembro"])){
 		die();
 	}
 	else
-	echo "ERROR";
+	echo "<p class='error'>ERROR</p>";
 }
 $miembro = $conn->real_escape_string($_GET["miembro"]);
 HTMLinicio("Inicio");
@@ -21,7 +25,9 @@ if ($miembro_row !== FALSE && $miembro_row->num_rows === 1){
 ?>
 <h2 class="titulosh2" id="panel_control"> Inicio</h2>
 <div class="estructura">
-	<!-- COLUMNA DE LA IZQUIERDA-->
+	<!-- COLUMNA DE LA IZQUIERDA
+		En esta columna se mostrará el nombre del miembro del grupo seleccionado, 
+		una foto del mismo, y una descripción biográfica-->
 	<aside class="columIZQ">
 		
 			<h3><?php echo $miembro_row["Nombre"]?></h3>
@@ -38,7 +44,9 @@ if ($miembro_row !== FALSE && $miembro_row->num_rows === 1){
 		
 		
 	
-	<!-- COLUMNA DE LA DERECHA-->
+	<!-- COLUMNA DE LA DERECHA
+		En esta columna se ofrece un menu con el nombre y rol de cada uno de los miembros del grupo
+		de los que se puede seleccionar el deseado para obtener informacion-->
 	</aside>
 	<aside class="columDRCH">
 		<h2>Miembros del Grupo</h2>

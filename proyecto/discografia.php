@@ -1,6 +1,10 @@
 <?php
 require_once "templates/operaciones_db.php";
 require_once "pag_comun.php";
+/**
+ * Hacemos conexion a la base de datos para obtener los datos pertinentes del disco que vamos a mostrar
+ * El disco mostrado es eleccion del visitante, por defecto tenemos seleccionado uno
+ */
 $conn = db_conectar();
 if (!isset($_GET["disco"])){
 	$result = $conn->query("SELECT * FROM discos LIMIT 1,1");//Limit: coge todas las primera columna de la tabla osea NOMBRE
@@ -17,7 +21,9 @@ if ($disco_row !== FALSE && $disco_row->num_rows === 1){
 	$disco_row = $disco_row->fetch_assoc();
 } else die();
 ?>
-
+<!--Una vez tenemos los datos que necesitamos la pagina los mostrara siguiendo el siguiente
+esquema de HTML, en una columna en la izquierda se mostrara el nombre del disco, la caratura y la tabla de las canciones
+Tambien se mostrara de forma mas centrada una descripcion del disco seleccionado -->
 <h2 class="titulosh2" id="LIST"> Discografía</h2>
 
 <div class="estructura">
@@ -66,6 +72,7 @@ if ($disco_row !== FALSE && $disco_row->num_rows === 1){
 		</p>
 	</div>
 	<!-- COLUMNA DE LA DERECHA-->
+	<!-- Esta columna será el menú sobre el que el usuario puede escoger el disco a mostrar -->
 	<aside class="columDRCH2"> <!-- Incorporar en cada parrafo una mini imagen de cada albun-->
 		<h3>AC/DC ALBUMS</h3>
 		<ul>

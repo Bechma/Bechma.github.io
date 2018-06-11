@@ -12,6 +12,10 @@ HTMLinicio("Biografia");
 
 	<div class="parrafoBiblio">
 		<?php
+		/**
+		 * Conectamos con la base de datos para sacar cada uno de los
+		 * párrafos biograficos del grupo que se encuentran almacenados, y los mostramos 
+		 */
 		require_once "templates/operaciones_db.php";
 		$conn = db_conectar();
 		$result = $conn->query("SELECT * FROM biografia");
