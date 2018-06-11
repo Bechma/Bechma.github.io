@@ -819,6 +819,7 @@ function backup(){
 // Obtener listado de tablas
 $db = db_conectar();
 $f = "/home/alumnos/1718/mianbr1718/public_html/mianbr1718.sql";
+
 $tablas = array();
 $result = mysqli_query($db, 'SHOW TABLES');
 

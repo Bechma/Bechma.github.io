@@ -199,7 +199,7 @@ function db_insertar_disco(){
 		$i=1;
 		while(isset($_POST["titulo$i"]))
 		{
-			echo"HOLA$i";
+	
 			$titulo=$conn->real_escape_string($_POST["titulo$i"]);
 			$duracion=$conn->real_escape_string($_POST["duracion$i"]);
 			$result = $conn->query("INSERT INTO canciones VALUES ('$titulo','$duracion','$nombre') ");
