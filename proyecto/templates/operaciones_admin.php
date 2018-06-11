@@ -900,7 +900,7 @@ function borrarBD(){
 	
 	foreach($tablas as $tab)
 	{	
-		echo "$tab<br>";
+		
 		if($tab != 'usuarios')
 			$db->query("DELETE FROM $tab");
 	}
