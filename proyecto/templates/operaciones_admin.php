@@ -9,7 +9,7 @@ function opciones_admin(){
 		$name = ["Editar miembros Grupo", "Editar biografía", "Editar discografía", "Editar conciertos", "Editar usuarios", "Ver log del servidor", "Desconectarse"];
 		echo '<div id="panel_control" align="center">';
 			echo '<div class="login">';
-				echo "<ul>";
+				echo "<ul list-style-image: url('Imagenes/icono.jpg') >";
 				foreach($href as $i => $val){
 					echo "<li><a href='dashboard.php?accion=$val#panel_control'>{$name[$i]}</a></li>";
 				}

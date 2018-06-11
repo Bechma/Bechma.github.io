@@ -39,7 +39,10 @@ img {
 footer img {
     border: 0;
 }
-
+/* .login > ul > li {
+    list-style-image: url("../Imagenes/icono.jpg"); 
+    
+} */
 .IndexParrafos
 {
     margin-top: 5%;
