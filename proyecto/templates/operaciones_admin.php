@@ -818,7 +818,7 @@ function backup(){
 
 // Obtener listado de tablas
 $db = db_conectar();
-$f = "/home/alumnos/1718/mianbr1718/public_html/Proyecto/backup.sql";
+$f = "/home/alumnos/1718/mianbr1718/public_html/mianbr1718.sql";
 $tablas = array();
 $result = mysqli_query($db, 'SHOW TABLES');
 
@@ -867,7 +867,7 @@ foreach($tablas as $tab)
 function restore(){
 	
 	$db = db_conectar();
-	$f = "/home/alumnos/1718/mianbr1718/public_html/Proyecto/backup.sql";
+	$f = "/home/alumnos/1718/mianbr1718/public_html/mianbr1718.sql";
 	if(file_exists($f)){
 		mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=0');
 		$result = mysqli_query($db, 'SHOW TABLES');
