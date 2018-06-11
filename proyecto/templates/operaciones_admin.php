@@ -8,8 +8,8 @@ require_once "operaciones_db.php";
  */
 function opciones_admin(){
 	if ($_SESSION["tipo_user"] === "admin"){
-		$href = ["miembros", "biografia", "discografia", "conciertos", "usuarios", "log", "logout"];
-		$name = ["Editar miembros Grupo", "Editar biografía", "Editar discografía", "Editar conciertos", "Editar usuarios", "Ver log del servidor", "Desconectarse"];
+		$href = ["miembros", "biografia", "discografia", "conciertos", "usuarios", "backup","restore","borrarBD", "log", "logout"];
+		$name = ["Editar miembros Grupo", "Editar biografía", "Editar discografía", "Editar conciertos", "Editar usuarios", "BackUp","Restore","Borrar BD","Ver log del servidor", "Desconectarse"];
 		echo '<div id="panel_control" align="center">';
 			echo '<div class="login">';
 				echo "<ul>";
@@ -362,6 +362,22 @@ function acciones(){
 				listar_log();
 				break;
 			//Si todavia no se ha escogido nada
+			
+			case "backup":
+				echo "<p class='correcto'>BackUp completado</p>";
+				backup();
+			break;
+
+			case "borrarBD":
+				echo "<p class='correcto'> BD borrada correctamente </p>";
+				borrarBD();
+			break;
+
+			case "restore":
+				echo "<p class='correcto'> Restore correcto</p>";
+				restore();
+			break;
+			
 			default:
 				echo "<p class='h1login'>Elija una opcion</p>";
 				break;
@@ -794,6 +810,97 @@ function modificar_biografia($id){
 		form_biografia("parrafo_mod2", $id);
 	} else
 		echo "<p class='error'>ERROR</p>";
+}
+function backup(){
+
+// Obtener listado de tablas
+$db = db_conectar();
+$f = "/home/alumnos/1718/antoniojj1718/public_html/Proyecto/prueba.sql";
+$tablas = array();
+$result = mysqli_query($db, 'SHOW TABLES');
+
+while ($row = mysqli_fetch_row($result)) $tablas[] = $row[0];
+
+// Salvar cada tabla
+
+$salida = '';
+
+foreach($tablas as $tab)
+	{
+	$result = mysqli_query($db, 'SELECT * FROM ' . $tab);
+	$num = mysqli_num_fields($result);
+	$salida.= 'DROP TABLE ' . $tab . ';';
+	$row2 = mysqli_fetch_row(mysqli_query($db, 'SHOW CREATE TABLE ' . $tab));
+	$salida.= "\n\n" . $row2[1] . ";\n\n";
+
+	// row2[0]=nombre de tabla
+
+	while ($row = mysqli_fetch_row($result))
+		{
+		$salida.= 'INSERT INTO ' . $tab . ' VALUES(';
+		for ($j = 0; $j < $num; $j++)
+			{
+			$row[$j] = addslashes($row[$j]);
+			$row[$j] = preg_replace("/\n/", "\\n", $row[$j]);
+			if (isset($row[$j])) 
+				$salida.= '"' . $row[$j] . '"';
+			else $salida.= '""';
+			if ($j < ($num - 1))
+			 $salida.= ',';
+			}
+
+		$salida.= ");\n";
+		}
+
+	$salida.= "\n\n\n";
+	//$actual = file_get_contents($f);
+	//$actual .= $salida;
+	file_put_contents($f, $salida);
+	}
+
+
+}
+
+function restore(){
+	$db = db_conectar();
+	$f = "/home/alumnos/1718/antoniojj1718/public_html/Proyecto/prueba.sql";
+	mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=0');
+$result = mysqli_query($db, 'SHOW TABLES');
+
+while ($row = mysqli_fetch_row($result)) mysqli_query($db, 'DELETE * FROM ' . $row[0]);
+$error = '';
+$sql = file_get_contents($f);
+$queries = explode(';', $sql);
+
+foreach($queries as $q)
+	{
+	if (!mysqli_query($db, $q)) $error.= mysqli_error($db);
+	}
+
+mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=1');
+
+}
+
+function borrarBD(){
+	
+$db = db_conectar();
+$tablas = array();
+$result = mysqli_query($db, 'SHOW TABLES');
+$correo_actual = $_SESSION["email"];
+//print_r($tablas);
+while ($row = mysqli_fetch_row($result)) $tablas[] = $row[0];
+foreach($tablas as $tab)
+	{
+		
+		
+		if($tab != 'usuarios')
+		 mysqli_query($db, 'DROP TABLE ' . $tab . ';');
+	
+	}
+	$result = $db->query("DELETE * FROM usuarios WHERE Email <> '{$_SESSION["email"]}'");
+	print_r($result);
+	echo "$result";
+	mysqli_query($db, 'DROP TABLE discos;');
 }
 //-------------------------------------------------------------------------------------------------------
 /**

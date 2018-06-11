@@ -4,9 +4,12 @@
  */
 function db_conectar(){
 	$servername = "localhost";
-	$username = "mianbr1718";
-	$password = "mA29PIX8";
-	$dbname = "mianbr1718";
+	$username = "antoniojj1718";
+	$password = "qA4762BN";
+	$dbname = "antoniojj1718";
+	//$username = "mianbr1718";
+	//$password = "mA29PIX8";
+	//$dbname = "mianbr1718";
 
 	// $servername = "localhost";
 	// $username = "root";
