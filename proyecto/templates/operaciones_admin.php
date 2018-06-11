@@ -862,45 +862,42 @@ foreach($tablas as $tab)
 }
 
 function restore(){
+	
 	$db = db_conectar();
 	$f = "/home/alumnos/1718/antoniojj1718/public_html/Proyecto/prueba.sql";
 	mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=0');
-$result = mysqli_query($db, 'SHOW TABLES');
+	$result = mysqli_query($db, 'SHOW TABLES');
 
-while ($row = mysqli_fetch_row($result)) mysqli_query($db, 'DELETE * FROM ' . $row[0]);
-$error = '';
-$sql = file_get_contents($f);
-$queries = explode(';', $sql);
+	while ($row = mysqli_fetch_row($result)) mysqli_query($db, 'DELETE * FROM ' . $row[0]);
+	$error = '';
+	$sql = file_get_contents($f);
+	$queries = explode(';', $sql);
 
-foreach($queries as $q)
+	foreach($queries as $q)
 	{
-	if (!mysqli_query($db, $q)) $error.= mysqli_error($db);
+		if (!mysqli_query($db, $q)) $error.= mysqli_error($db);
 	}
 
-mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=1');
+	mysqli_query($db, 'SET FOREIGN_KEY_CHECKS=1');
 
 }
 
 function borrarBD(){
 	
-$db = db_conectar();
-$tablas = array();
-$result = mysqli_query($db, 'SHOW TABLES');
-$correo_actual = $_SESSION["email"];
-//print_r($tablas);
-while ($row = mysqli_fetch_row($result)) $tablas[] = $row[0];
-foreach($tablas as $tab)
-	{
-		
-		
+	$db = db_conectar();
+	$tablas = array();
+	$result = $db->query("SHOW TABLES");
+	$correo_actual = $_SESSION["email"];
+	print_r($tablas);
+	while ($row = $result->fetch_assoc()) $tablas[] = $row["Tables_in_antoniojj1718"];
+	print_r($tablas);
+	foreach($tablas as $tab)
+	{	
+		echo "$tab<br>";
 		if($tab != 'usuarios')
-		 mysqli_query($db, 'DROP TABLE ' . $tab . ';');
-	
+			$db->query("DELETE FROM $tab");
 	}
-	$result = $db->query("DELETE * FROM usuarios WHERE Email <> '{$_SESSION["email"]}'");
-	print_r($result);
-	echo "$result";
-	mysqli_query($db, 'DROP TABLE discos;');
+	$result = $db->query("DELETE FROM usuarios WHERE Email <> '{$_SESSION["email"]}'");
 }
 //-------------------------------------------------------------------------------------------------------
 /**
