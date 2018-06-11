@@ -61,6 +61,7 @@ function HTMLfin()
         
     </div>
     <p> Copyright &copy; Todos los derechos reservados 2017-2018</p>
+    <a href="documentacion.pdf">Link a la documentacion</a>
  
 </footer>
 </body>
